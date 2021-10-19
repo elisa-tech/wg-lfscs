@@ -1,1 +1,2 @@
-
+### Welcome to the Linux Features for Safety-Critical Systems (LFSCS) WG wiki!
+You are invited to use this wiki as a collaborative scratch pad for any new ideas, proposals, feature design, or anything else related to the goals and purposes of the WG.
