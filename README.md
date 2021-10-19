@@ -3,7 +3,7 @@ The ELISA Linux Features for Safety-Critical Systems (LFSCS) WG investigates Lin
 This repository will contain the peer-reviewed materials produced by and for this group.  Additional collaborative work-in-progress (topic suggestions, notes, etc.) in the project wiki.
 
 # Project index
-  * Mission statement
+  * Mission statement  https://github.com/coppermanME/wg-LFSCS/blob/main/mission.md
 
 # External links
   * ELISA home page https://elisa.tech
