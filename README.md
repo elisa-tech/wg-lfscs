@@ -7,6 +7,6 @@ This repository will contain the peer-reviewed materials produced by and for thi
   * Mission statement
 
 # External links
-  * ELISA home page
-  * LFSCS mailing list and meeting calendar
+  * ELISA home page https://elisa.tech
+  * LFSCS mailing list and meeting calendar  https://lists.elisa.tech/g/linux-features
   * Meeting minutes (Google drive)
