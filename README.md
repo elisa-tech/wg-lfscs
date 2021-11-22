@@ -8,4 +8,4 @@ This repository will contain the peer-reviewed materials produced by and for thi
 # External links
   * [ELISA home page](https://elisa.tech)
   * [LFSCS mailing list and meeting calendar](https://lists.elisa.tech/g/linux-features)
-  * Meeting minutes (Google drive)
+  * [Meeting minutes (Google drive)](https://docs.google.com/document/d/15jrJp7p0Ux_oEPOqqK7Rglzs9QNY29wYPSZpOdDfUbY/edit#)
