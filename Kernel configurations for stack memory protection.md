@@ -4,9 +4,9 @@ These mechanisms include the following:
 
 1. User space stack protection – OS mechanisms which provide the infrastructure for a compiler (e.g., gcc) to detect corrupted data:
 
-  * Uninitialized variables (which can yield corrupted data if accessed)
+  - Uninitialized variables (which can yield corrupted data if accessed)
 
-  * Stack overflow (which can override data outside the stack boundaries and therefore provide no guarantees on data integrity)
+  - Stack overflow (which can override data outside the stack boundaries and therefore provide no guarantees on data integrity)
 
 Note that these features commonly require a combination of kernel configuration to enable the features, as well as compiler configuration to support the runtime stack protection.  In addition, these features have some runtime performance impact which needs to be considered, and often can be configured with increasing levels of protection.  The integrator must clearly understand these implications and configure both the kernel as well as the compiler to provide the appropriate level of support.
 
