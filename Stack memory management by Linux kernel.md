@@ -36,11 +36,11 @@ Reference diagram on page 81 of https://static.packt-cdn.com/downloads/978178995
     * Print list (including pids) of all running processes
 * cat /proc/< pid >/stack   
     * Dumps kernel space stack (call frame per line)
-* gstack
+* [gstack](https://linux.die.net/man/1/gstack)
     * Outputs user space stack
-* strace()  
+* [strace()](https://man7.org/linux/man-pages/man1/strace.1.html)  
     * trace system calls
-* ltrace()
+* {ltrace()](https://man7.org/linux/man-pages/man1/ltrace.1.html)
     * trace library calls
  * Code samples:   git clone
    * [current_affairs](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs)
