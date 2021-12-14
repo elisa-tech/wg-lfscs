@@ -4,9 +4,6 @@
 * [in_task()](https://github.com/torvalds/linux/blob/master/include/linux/preempt.h)  See line 121
 * [struct task_struct](https://github.com/torvalds/linux/blob/master/include/linux/sched.h)  From line 723
 * [current pointer](https://www.kernel.org/doc/html/latest/kernel-hacking/hacking.html#current)  For example, current --> pid    
-* Code samples:   git clone
-   * [current_affairs](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs)
-   * [thrd_showall](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/foreach/thrd_showall)
 
 ## Kernel execution contexts
 1. A user application normally runs in unprivileged mode, in user space.  Contexts for execution of kernel code by user applications:
@@ -34,3 +31,17 @@
   
 Reference diagram on page 81 of https://static.packt-cdn.com/downloads/9781789953435_ColorImages.pdf
 
+## Seeing is believing
+* ps aux   
+    * Print list (including pids) of all running processes
+* cat /proc/< pid >/stack   
+    * Dumps kernel space stack (call frame per line)
+* gstack
+    * Outputs user space stack
+* strace()  
+    * trace system calls
+* ltrace()
+    * trace library calls
+ * Code samples:   git clone
+   * [current_affairs](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs)
+   * [thrd_showall](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/foreach/thrd_showall)
