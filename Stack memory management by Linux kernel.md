@@ -42,6 +42,14 @@ Reference diagram on page 81 of [Linux Kernel Programming diagrams](https://stat
     * trace system calls
 * [ltrace()](https://man7.org/linux/man-pages/man1/ltrace.1.html)
     * trace library calls
+ * ps -LA
+   * Prints pid field of task structure (under LWP = LightWeight Process or thread column) and tgid (Thread Group member, which is actually the process id, under PID column)
+   * In case process is single thread, pid = tgid.
+   * In multithreaded, tgid is unique per thread
  * Code samples:   git clone
    * [current_affairs](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs)
    * [thrd_showall](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/foreach/thrd_showall)
+      * Iterate over tasks in kernel's task lists to display all live processes (using for_each_process() macro), 
+      * Or all threads within each process (using the pair of do_each_thread() {...} while_each_thread() macros. 
+      * main() thread's current--> mm points to a structure of type mm_struct, which represents the entire process' user space mapping.
+      * If current-->mm is NULL, it means this process has no user space mapping so it must be a kernel thread.
