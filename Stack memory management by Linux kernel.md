@@ -21,6 +21,9 @@
       * Heap segment - for dynamic allocation, grows up from lower addresses
       * Libraries (text data) - shared libraries which a process may dynamically link into
       * Stack - Captures high-level lanaguage function calling flow, including call/return sequence, parameter passing, local variable instantiation, return value.
-          Stack allocation is architecture dependent, but normally grows down towards lower addresses.  A stack frame is allocated and appropriately initialized on every funciton call.
-          Although the details of stack frame layout are architecture dependent, a SP (Stack Pointer) register normally will be used to point to current frame at top of stac
-Reference diagram on page 81 of 
+          Stack allocation is architecture dependent, but normally grows down towards lower addresses.  
+          A stack frame is allocated and appropriately initialized on every funciton call.
+          Details of stack frame layout are architecture dependent, a SP (Stack Pointer) register normally will be used to point to current frame at top of stack
+
+Reference diagram on page 81 of https://static.packt-cdn.com/downloads/9781789953435_ColorImages.pdf
+
