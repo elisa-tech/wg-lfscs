@@ -29,7 +29,7 @@
 5. [getrlimit / setrlimit](https://man7.org/linux/man-pages/man2/setrlimit.2.html) may be used to get/set resource limits, in particular to set max size of user space stack.
 6. A dedicated stack per CPU may be allocated by architecture for interrupt handling, to avoid overloading the kernel mode stack of the thread which was interrupted.
   
-Reference diagram on page 81 of https://static.packt-cdn.com/downloads/9781789953435_ColorImages.pdf
+Reference diagram on page 81 of [Linux Kernel Programming diagrams](https://static.packt-cdn.com/downloads/9781789953435_ColorImages.pdf)
 
 ## Seeing is believing
 * ps aux   
