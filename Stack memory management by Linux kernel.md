@@ -40,7 +40,7 @@ Reference diagram on page 81 of https://static.packt-cdn.com/downloads/978178995
     * Outputs user space stack
 * [strace()](https://man7.org/linux/man-pages/man1/strace.1.html)  
     * trace system calls
-* {ltrace()](https://man7.org/linux/man-pages/man1/ltrace.1.html)
+* [ltrace()](https://man7.org/linux/man-pages/man1/ltrace.1.html)
     * trace library calls
  * Code samples:   git clone
    * [current_affairs](https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs)
