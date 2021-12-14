@@ -1,5 +1,5 @@
-Background notes on stack memory management by Linux kernel
-References:
+# Background notes on stack memory management by Linux kernel
+## References:
     1. [Diagrams from Chapters 6] (https://static.packt-cdn.com/downloads/9781789953435_ColorImages.pdf)
     2. https://github.com/torvalds/linux/blob/master/include/linux/preempt.h.  in_task() [line 121]
     3. https://github.com/torvalds/linux/blob/master/include/linux/sched.h struct task_struct [from line 723], use of current pointer,    https://www.kernel.org/doc/html/latest/kernel-hacking/hacking.html#current       
@@ -8,7 +8,8 @@ References:
 ·         https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs
 ·         https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/foreach/thrd_showall
 
-1. A user application normally runs in unprivileged mode, in user space.  Contexts for execution of kernel code by user applications:
+## Kernel execution contexts
+1. A user application normally runs in unprivileged mode, in user space.  Contexts for execution of kernel code by user applications:#
     a) Process context - kernel code is executed from a system call or a processor exception (e.g., page fault).  Synchronous
     b) Interrupt context - kernel code (e.g., device driver's interrupt handler) is executed from a peripheral chip's HW interrupt.  Asynchronous.
 2. Kernel mode threads are application which execute exclusively in kernel space, in process context.
