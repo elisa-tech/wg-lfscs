@@ -1,12 +1,12 @@
 # Background notes on stack memory management by Linux kernel
 ## References:
-    1. [Diagrams from Chapters 6] (https://static.packt-cdn.com/downloads/9781789953435_ColorImages.pdf)
-    2. https://github.com/torvalds/linux/blob/master/include/linux/preempt.h.  in_task() [line 121]
-    3. https://github.com/torvalds/linux/blob/master/include/linux/sched.h struct task_struct [from line 723], use of current pointer,    https://www.kernel.org/doc/html/latest/kernel-hacking/hacking.html#current       
-          For example, current --> pid    
-    4. Code samples   git clone
-·         https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs
-·         https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/foreach/thrd_showall
+    *  [Diagrams from Chapters 6] (https://static.packt-cdn.com/downloads/9781789953435_ColorImages.pdf)
+    *  [in_task() on line 121] (https://github.com/torvalds/linux/blob/master/include/linux/preempt.h)
+    *  [struct task_struct from line 723] (https://github.com/torvalds/linux/blob/master/include/linux/sched.h)
+    *  [Use of current pointer] (https://www.kernel.org/doc/html/latest/kernel-hacking/hacking.html#current)  For example, current --> pid    
+    *  Code samples   git clone
+         [current_affairs] (https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/current_affairs)
+         [thrd_showall] (https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/ch6/foreach/thrd_showall)
 
 ## Kernel execution contexts
 1. A user application normally runs in unprivileged mode, in user space.  Contexts for execution of kernel code by user applications:#
