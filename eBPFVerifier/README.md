@@ -1,6 +1,6 @@
 # eBPF Verifier Introduction
-
-This documentation is based on Linux 5.17.
+ v
+This documentation is based on Linux v5.17 and it is also applicable to v5.15, the LTS version.
 
 The Berkeley Packet Filter (eBPF) enables user space programs to execute in the Linux kernel. 
 
