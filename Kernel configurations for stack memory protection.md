@@ -39,3 +39,27 @@ Examples of kernel features supporting user space stack memory protection:
   * CONFIG_TREAD_INFO_IN_TASK
       * Moves thread information off the stack and into the task struct for protection of task info, particularly during context switch.
 
+**ANALYSIS**
+  * A process/thread will always have a kernel-siede component and optionally a user-space side part, which is the typical case of applications.
+  * Each side has own call stack
+  * The user-side call stack is managed accordingly to how the application/library binary has been compiled
+  * The kernel-side stack is managed accordingly to how the kernel has been compiled
+  * The userspace-side stack is exposed to corruption primarily coming from:
+     * application
+     * libraries linked in by the application
+     * memory interference coming from low level kernel mechanisms (this is relatively less likely to happen undetected)
+  * The kernel-space side is exposed to corruption from anything that runs with kernel privilege
+  * Adding stackprotection does generate overhead
+  * The available kernel options (STACKPROTECTOR and STACKPROTECTOR_STRONG) rely on heuristic to decide which functions should receive canaries hardening and which shouldn't.
+  * The compiler, however, supports also a third option that allows adding protection to all of them.
+   
+ 
+**CONSIDERATIONS**
+  * Assuming that a userspace program has been designed and implemented correctly, and that the same can be said for the libraries it uses, stack protection is less useful as a runtime error detection tool, for an end product, and more as debugging tool during development and testing.
+  * Other applications that might not have been designed with the same quality criteria are prevented from interfering by the way userspace memory is mapped: a program can only see (and interfere with) the memory it has been assigned.
+  * In kernel space, on the other hand, different modules with differnet level of trust are exposed to each other.
+  * Even if a module was developed and implemented correctly, it is exposed to the interference from another module that doesn't meet the same quality criteria.
+  * Here monitoring for stack corruption at runtime is more critical and has a higher ROI, in terms of improved confidence vs. overhead introduced.
+  * In particular, by enabling VMAP_STACK, it is possible to make the system more resilinet to failures, and increase the confidence that It can be trusted to take some corrective actions (for example terminating the offending task and entering safe mode)
+  * Enabling full function coverage for stack canaries reduces further the chances of having undetected stack corruption. This option is not currently available in the kernel, however it can be added easily. When activated, though, it can cause (at least on on ARM64) stack overflow, because of the additional space required. This can be avoided by increasing the stack size (doubled).
+  * Whether adding full stack canraries support is feasible or not needs to be investigated [ongoing] and results might differ from platform to platform, however it is normally expected that a userspace program will spend most of its time executing own code, rather than waiting for syscalls to complete. Perhaps the best way to judge the feasibility of the solution is to gauge the increase in execution time and latency for each desired use-case.
