@@ -1,2 +1,30 @@
 ### Welcome to the Linux Features for Safety-Critical Systems (LFSCS) WG wiki!
 You are invited to use this wiki as a collaborative scratch pad for any new ideas, proposals, feature design, or anything else related to the goals and purposes of the WG.
+
+Jules' Work plan proposals
+
+   + BPF current issue proposed by Daniel Borkmann
+                * Move samples/bpf to BPF selftests folder to improve on test_prog BPFci ==> currently ongoing, rewriting the Makefile
+                * Require reading on Makefile writing
+                * Duration: ongoing - one more week - expected to complete 26th May
+                * progress:
+                        + moved files, made them compiled correctly in the same directory
+                        + challenges :
+                                + merging two makefiles into one
+                                + Migrates tests from the samples/bpf to selftests/bpf 
+
+   + Create a bcc tool for network statistics using XDP/BPF technology
+           + proposed tool to gather statisitics on per ip address connected to network event block an IP if suspicious
+        	* Duration: two weeks
+                	- 1 week reading xdp documents and practice
+                	- 1 week coding
+			- 2 days for writing man page fof the tool
+                	- expected completion 7th June.
+
+   + Improving the eBPF verifier : work with Wenhui
+                + Duration: One Month - starts 6th June
+		+ select which issue to work on 
+		+ Improve eBPF
+		+ Write a test for it 
+   + Any other issues assigned by mentor
+
