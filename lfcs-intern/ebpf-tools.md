@@ -33,7 +33,7 @@ With BPF, we can run mini programs on wide variety of kernel and application eve
 
 > An eBPF program is attached to a designated code path in the Kernel. When a code path is traversed, any attached eBPF programs are executed.
 
-The main use of BPF are networking, observability and security.
+The main use of BPF are networking, observability and security.  These same use cases may be found to be particularly relevant for safety-critical systems as well.
 
 In this introduction, we will focus on the main use of the BPF subsystem.
 
