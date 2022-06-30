@@ -28,3 +28,43 @@ Jules' Work plan proposals
 		+ Write a test for it 
    + Any other issues assigned by mentor
 
+**********************************************************************************************
+Işıl's work plan draft
+
+Working on the Gramine issue "Communication with devices" opened by
+Dmitrii Kuvaiskii.
+     - https://github.com/gramineproject/gramine/issues/353
+     - Support communication with hardware accelarators (GPU)
+
+ Main steps:
+
+- Communicate with Gramine maintainers - still in progress (users@gramineproject.io)
+- Build and run Gramine project ~2 weeks
+     - Dependencies for SGX
+     - Dependencies for Gramine
+- Read documentation ~2 weeks
+- Check GPU support ~1 week
+- Try Gramine with a CUDA program ~1 week
+- Add CUDA programs if there is support
+
+- Read related work ~ 2 weeks
+     - Computation offloading to hardware accelerators in Intel SGX and Gramine Library OS.
+
+Learning Linux security
+
+- Learn about Open source development
+     - https://training.linuxfoundation.org/training/introduction-to-linux-open-source-development-and-git/
+- Learn about security/safety
+     - https://www.coursera.org/learn/securing-linux-systems
+     - https://www.coursera.org/specializations/cyber-security
+     - https://www.coursera.org/learn/cloud-security-basics
+- Security in Linux, Webinars, Papers
+     - https://confidentialcomputing.io/webinars/
+     - ...
+     - A Tale of Two Worlds: Assessing the Vulnerability of Enclave Shielding Runtimes
+     - ...
+
+- Research project proposal "Safety in embedded GPU systems"
+     - Security
+     - Reliability
+**********************************************************************************************
