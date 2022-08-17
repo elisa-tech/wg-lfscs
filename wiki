@@ -31,24 +31,17 @@ Jules' Work plan proposals
 **********************************************************************************************
 Işıl's work plan draft
 
-Working on the Gramine issue "Communication with devices" opened by
-Dmitrii Kuvaiskii.
-     - https://github.com/gramineproject/gramine/issues/353
-     - Support communication with hardware accelarators (GPU)
+Working on the mystikos project, a runtime and a set of tools for running Linux applications in a hardware trusted execution environment (TEE).
+     - https://github.com/deislabs/mystikos
 
  Main steps:
 
-- Communicate with Gramine maintainers - still in progress (users@gramineproject.io)
-- Build and run Gramine project ~2 weeks
-     - Dependencies for SGX
-     - Dependencies for Gramine
-- Read documentation ~2 weeks
-- Check GPU support ~1 week
-- Try Gramine with a CUDA program ~1 week
-- Add CUDA programs if there is support
-
-- Read related work ~ 2 weeks
-     - Computation offloading to hardware accelerators in Intel SGX and Gramine Library OS.
++ Build and run tests in mystikos, read documentation ~2 weeks
++ Fix a minor issue ~2 weeks
+	- After getting comment from contributors, created a pull request: https://github.com/deislabs/mystikos/pull/1404 (17/8)
++ Communicate with maintainers (paul.c.allen@microsoft.com)
+- Work in a performance issue: https://github.com/deislabs/mystikos/issues/1052 ~3 weeks
+- Extend mystikos with additional system calls or any other feature suggested by maintainers
 
 Learning Linux security
 
@@ -59,6 +52,7 @@ Learning Linux security
      - https://www.coursera.org/specializations/cyber-security
      - https://www.coursera.org/learn/cloud-security-basics
 - Security in Linux, Webinars, Papers
+     + Attended SGX Community Day (https://community.intel.com/t5/Blogs/Tech-Innovation/Data-Center/Third-SGX-Community-Day/post/1393177)
      - https://confidentialcomputing.io/webinars/
      - ...
      - A Tale of Two Worlds: Assessing the Vulnerability of Enclave Shielding Runtimes
