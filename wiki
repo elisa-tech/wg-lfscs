@@ -39,9 +39,16 @@ Working on the mystikos project, a runtime and a set of tools for running Linux 
 + Build and run tests in mystikos, read documentation ~2 weeks
 + Fix a minor issue ~2 weeks
 	- After getting comment from contributors, created a pull request: https://github.com/deislabs/mystikos/pull/1404 (17/8)
-+ Communicate with maintainers (paul.c.allen@microsoft.com)
-- Work in a performance issue: https://github.com/deislabs/mystikos/issues/1052 ~3 weeks
-- Extend mystikos with additional system calls or any other feature suggested by maintainers
+	- Already fixed, PR closed
++ Communicate with maintainers (paul.c.allen@microsoft.com - email, Vikas Amar Tikoo - linkedin)
+- Work in improving debuggability 
+	- writing gdb extensions, 
+	- improvements to strace mechanism, 
+	- interactive shell support, 
+	- integration with native debugging tools like valgrind
+- SGX resources
+	- Report with references to many papers: Intel SGX Explained (https://eprint.iacr.org/2016/086.pdf)
+	- Intel page with LibOS projects listed: https://www.intel.com/content/www/us/en/developer/tools/software-guard-extensions/get-started.html
 
 Learning Linux security
 
