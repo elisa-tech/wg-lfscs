@@ -33,3 +33,5 @@ Examples of kernel features supporting user space stack memory protection:
 
   * CONFIG_TREAD_INFO_IN_STACK 
       * Moves thread information off the stack and into the task struct for protection of task info, particularly during context switch
+
+A tool for checking the related configurations could be found here:  https://github.com/elisa-tech/kconfig-safety-check
