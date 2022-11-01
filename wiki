@@ -41,12 +41,12 @@ Working on the mystikos project, a runtime and a set of tools for running Linux 
 	- After getting comment from contributors, created a pull request: https://github.com/deislabs/mystikos/pull/1404 (17/8)
 	- Already fixed, PR closed
 + Communicate with maintainers (paul.c.allen@microsoft.com - email, Vikas Amar Tikoo - linkedin)
-- Work in improving debuggability 
++ Work in improving debuggability 
 	- writing gdb extensions, 
 	- improvements to strace mechanism, 
-	- interactive shell support, 
+	*** interactive shell support ***
 	- integration with native debugging tools like valgrind
-+ An issue created in mystikos project: https://github.com/deislabs/mystikos/issues/1423
++ An issue created in mystikos project: Interactive bash support issues - https://github.com/deislabs/mystikos/issues/1423
 	- Unsupported system call SYS_pselect6
 	- Look into bash source code to find a way to work around ioctl requests
 - SGX resources
