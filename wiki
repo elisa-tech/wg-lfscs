@@ -46,6 +46,9 @@ Working on the mystikos project, a runtime and a set of tools for running Linux 
 	- improvements to strace mechanism, 
 	- interactive shell support, 
 	- integration with native debugging tools like valgrind
++ An issue created in mystikos project: https://github.com/deislabs/mystikos/issues/1423
+	- Unsupported system call SYS_pselect6
+	- Look into bash source code to find a way to work around ioctl requests
 - SGX resources
 	- Report with references to many papers: Intel SGX Explained (https://eprint.iacr.org/2016/086.pdf)
 	- Intel page with LibOS projects listed: https://www.intel.com/content/www/us/en/developer/tools/software-guard-extensions/get-started.html
