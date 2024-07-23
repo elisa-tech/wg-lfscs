@@ -1,7 +1,7 @@
 CC = $(CROSS_COMPILE)gcc
 CFLAGS = --static -nostartfiles
 
-all: min ftrace_it
+all: min ftrace_it min.large
 
 min: min.c
 	$(CC) $(CFLAGS) -o min min.c
