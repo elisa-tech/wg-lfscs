@@ -1,4 +1,5 @@
 
+all: min ftrace_it
 min: min.c
 	gcc --static -nostartfiles -o min min.c
 
