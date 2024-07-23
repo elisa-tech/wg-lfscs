@@ -52,3 +52,47 @@ sudo ./ftrace_it ./min
 ```
 
 Note: sudo is required to access and modify ftrace settings.
+
+# Elisa scenario
+This repo, although it can run on any Linux system, is intended to be run on
+a minimal aarch64 system within the ELISA community for which it was realized.
+To recreate the environment where it is built, please use Buildroot and apply
+the patch br_package.patch to add the repo to the available Buildroot packages.
+Then, use the provided configurations `br.config` (which should be copied to 
+`.config`) and `kernel.config` to build the system.
+
+The resulting build output, located at `{br_dir}/output/images/Image`, needs 
+to be used with aarch64 QEMU:
+```
+{br_dir} $ qemu-system-aarch64 -M virt -m 512M -cpu cortex-a72 -nographic -smp 2 -kernel output/images/Image
+```
+Inside the VM, use the following commands to recreate the log:
+```
+mount -t tracefs none /sys/kernel/tracing/
+sleep 20 && echo start && cat /sys/kernel/tracing/trace_pipe > /tmp/log &
+
+/usr/bin/ftrace_it /usr/bin/min
+or
+/usr/bin/ftrace_it /usr/bin/min.large
+```
+# Summary
+1. Download and extract Buildroot: [Buildroot 2024.02.4}(https://buildroot.org/downloads/buildroot-2024.02.4.tar.gz)
+2. Apply the patch: `br_package.patch`
+3. Use provided configurations:
+    * Copy `br.config` to `.config`
+    * Use `kernel.config` (place it in the BR root dir
+4. Build the system.
+5. Run the built image with QEMU:
+```
+qemu-system-aarch64 -M virt -m 512M -cpu cortex-a72 -nographic -smp 2 -kernel output/images/Image
+```
+5. Recreate the log inside the VM:
+```
+mount -t tracefs none /sys/kernel/tracing/
+sleep 20 && echo start && cat /sys/kernel/tracing/trace_pipe > /tmp/log &
+
+/usr/bin/ftrace_it /usr/bin/min
+or
+/usr/bin/ftrace_it /usr/bin/min.large
+```
+
