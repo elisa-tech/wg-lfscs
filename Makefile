@@ -1,10 +1,13 @@
+CC = $(CROSS_COMPILE)gcc
+CFLAGS = --static -nostartfiles
 
 all: min ftrace_it
+
 min: min.c
-	gcc --static -nostartfiles -o min min.c
+	$(CC) $(CFLAGS) -o min min.c
 
 min.large: min.large.c
-	gcc --static -nostartfiles -O0 -o min.large min.large.c
+	$(CC) $(CFLAGS) -O0 -o min.large min.large.c
 
 ftrace_it: ftrace_it.c
-	gcc ftrace_it.c -o ftrace_it
+	$(CC) ftrace_it.c -o ftrace_it
