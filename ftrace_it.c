@@ -57,37 +57,41 @@ void disable_ftrace() {
 }
 
 void set_irq_affinity(int cpu) {
-	DIR *dir;
-	struct dirent *entry;
-	char irq_dir[] = "/proc/irq/";
-	char file_path[512];
+	FILE *file = fopen("/proc/interrupts", "r");
+	if (!file) {
+		perror("fopen /proc/interrupts");
+		exit(EXIT_FAILURE);
+	}
+
+	char line[1024];
+	char irq[16];
+	char irq_name[128];
 	char cpu_mask[32];
 	int fd;
 
-	printf("In aarch64 not all interrupts can be routed, only GIC controlled ones. If any error, check if any of the wanted interrupts has not been routed.\n");
 	snprintf(cpu_mask, sizeof(cpu_mask), "%x", 1 << cpu);
 
-	if ((dir = opendir(irq_dir)) != NULL) {
-		while ((entry = readdir(dir)) != NULL) {
-			if (entry->d_type == DT_DIR && isdigit(entry->d_name[0])) {
-				snprintf(file_path, sizeof(file_path), "%s%s/smp_affinity", irq_dir, entry->d_name);
+	while (fgets(line, sizeof(line), file)) {
+		if (sscanf(line, "%15s %*s %*s %*s %127s", irq, irq_name) == 2) {
+			// Ignore 'arch_timer' IRQs
+			if (strstr(irq_name, "arch_timer") == NULL) {
+				char file_path[256];
+				snprintf(file_path, sizeof(file_path), "/proc/irq/%s/smp_affinity", irq);
 				printf("Setting %s affinity\n", file_path);
 				fd = open(file_path, O_WRONLY);
 				if (fd < 0) {
-					perror("open smp_affinity");
+					perror("IRQ: open smp_affinity");
 					continue;
 				}
 				if (write(fd, cpu_mask, strlen(cpu_mask)) < 0) {
-					perror("write smp_affinity");
+					perror("IRQ: write smp_affinity");
 				}
 				close(fd);
 			}
 		}
-		closedir(dir);
-	} else {
-		perror("opendir /proc/irq");
-		exit(EXIT_FAILURE);
 	}
+
+	fclose(file);
 }
 
 void pin_to_cpu(pid_t pid, int cpu) {
