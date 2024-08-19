@@ -80,7 +80,7 @@ or
 2. Apply the patch: `br_package.patch`
 3. Use provided configurations:
     * Copy `br.config` to `.config`
-    * Use `kernel.config` (place it in the BR root dir
+    * Use `kernel.config` (place it in the BR root dir)
 4. Build the system.
 5. Run the built image with QEMU:
 ```
@@ -95,4 +95,17 @@ sleep 20 && echo start && cat /sys/kernel/tracing/trace_pipe > /tmp/log &
 or
 /usr/bin/ftrace_it /usr/bin/min.large
 ```
-
+# Notes
+1. The suggested sleep 20 seconds can be too much, is better to keep it 
+   short. Iuse 5 instead of 20.
+2. To capture the log and work on it in local machine, the suggested strategy is to
+   use tmux pan capture and fetch it from screen. 
+   to capture tmux pane use `pipe-pane`. 
+   ```
+   C-b : pipe-pane "cat >log"
+   ```
+3. Lastly, to extract from logs the unique functions I suggest the following
+   bash one liner:
+   ```
+   cat logs | grep min.large | cut -d: -f2 | sed -r 's/ *<-/\n/'| tr -d $'\r'| sed -e 's/^ //' | sort| uniq >funcs
+   ```
