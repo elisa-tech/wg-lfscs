@@ -130,6 +130,7 @@ void pin_to_cpu(pid_t pid, int cpu) {
 		perror("sched_setaffinity");
 		exit(EXIT_FAILURE);
 	}
+	sched_yield();
 }
 
 int main(int argc, char *argv[]) {
