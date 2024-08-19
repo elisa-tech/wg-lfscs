@@ -68,7 +68,6 @@ to be used with aarch64 QEMU:
 ```
 Inside the VM, use the following commands to recreate the log:
 ```
-mount -t proc none /proc
 mount -t tracefs none /sys/kernel/tracing/
 sleep 20 && echo start && cat /sys/kernel/tracing/trace_pipe > /tmp/log &
 

@@ -101,10 +101,10 @@ void set_irq_affinity(int cpu) {
 				continue;
 			}
 
-			if (strstr(irq_name, "arch_timer") == NULL) {
+			if (strstr(irq_name, "timer") == NULL) {
 				char file_path[256];
 				snprintf(file_path, sizeof(file_path), "/proc/irq/%ld/smp_affinity", irq_num);
-				printf("Setting %s affinity\n", file_path);
+				printf("Setting %s (%s) affinity\n", irq_name, file_path);
 				fd = open(file_path, O_WRONLY);
 				if (fd < 0) {
 					perror("IRQ: open smp_affinity");
