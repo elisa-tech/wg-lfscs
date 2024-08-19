@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -6,11 +7,14 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
+#include <sched.h>
+#include <dirent.h>
+#include <ctype.h>
 
 volatile int *semaphore;
 
 void setup_ftrace(pid_t pid) {
-	char buffer[256];
+	char buffer[512];
 
 	int fd = open("/sys/kernel/tracing/current_tracer", O_WRONLY);
 	if (fd < 0) {
@@ -23,6 +27,7 @@ void setup_ftrace(pid_t pid) {
 		exit(EXIT_FAILURE);
 	}
 	close(fd);
+
 	fd = open("/sys/kernel/tracing/set_ftrace_pid", O_WRONLY);
 	if (fd < 0) {
 		perror("open set_ftrace_pid");
@@ -51,6 +56,49 @@ void disable_ftrace() {
 	close(fd);
 }
 
+void set_irq_affinity(int cpu) {
+	DIR *dir;
+	struct dirent *entry;
+	char irq_dir[] = "/proc/irq/";
+	char file_path[512];
+	char cpu_mask[32];
+	int fd;
+
+	snprintf(cpu_mask, sizeof(cpu_mask), "%x", 1 << cpu);
+
+	if ((dir = opendir(irq_dir)) != NULL) {
+		while ((entry = readdir(dir)) != NULL) {
+			if (entry->d_type == DT_DIR && isdigit(entry->d_name[0])) {
+				snprintf(file_path, sizeof(file_path), "%s%s/smp_affinity", irq_dir, entry->d_name);
+				fd = open(file_path, O_WRONLY);
+				if (fd < 0) {
+					perror("open smp_affinity");
+					continue;
+				}
+				if (write(fd, cpu_mask, strlen(cpu_mask)) < 0) {
+					perror("write smp_affinity");
+				}
+				close(fd);
+			}
+		}
+		closedir(dir);
+	} else {
+		perror("opendir /proc/irq");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void pin_to_cpu(pid_t pid, int cpu) {
+	cpu_set_t cpuset;
+	CPU_ZERO(&cpuset);
+	CPU_SET(cpu, &cpuset);
+
+	if (sched_setaffinity(pid, sizeof(cpuset), &cpuset) != 0) {
+		perror("sched_setaffinity");
+		exit(EXIT_FAILURE);
+	}
+}
+
 int main(int argc, char *argv[]) {
 	char tmp_buff[10];
 
@@ -77,13 +125,18 @@ int main(int argc, char *argv[]) {
 		while (*semaphore == 0) {
 		}
 
+		pin_to_cpu(getpid(), 1); // Pin child process to CPU 1
+
 		if (execve(argv[1], &argv[1], NULL) < 0) {
 			perror("execve");
 			exit(EXIT_FAILURE);
 		}
 	} else {
+		set_irq_affinity(0); // Set IRQ affinity to CPU 0
+
 		setup_ftrace(pid);
-		printf("all set in, press enter to start\n");
+
+		printf("All set, press enter to start\n");
 		read(0, tmp_buff, 1);
 
 		*semaphore = 1;
