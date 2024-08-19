@@ -26,14 +26,18 @@ gcc -o min min.c --static -nostartfiles
 
 This command compiles the application as a statically linked binary and omits
 the standard startup files, ensuring that no additional code is included.
+**NOTES**: the `min.large.c` differs from `min.c` because the text body is larger
+of a memory page, so kernel needs to trigger mm functions.
 
-`ftrace_it.c`
-The ftrace_it.c application sets up the ftrace subsystem to trace the execution
+# `ftrace_it.c`
+The `ftrace_it.c` application sets up the ftrace subsystem to trace the execution
 of a specified program, such as `min.c`. 
 It performs the following tasks:
 
 * Forks a child process.
+* Routes all routable interrupts to CPU0
 * Configures ftrace to trace the child process.
+* Makes sure the child process is pinned on CPU1
 * Starts the child process to execute the given program.
 * Waits for the child process to complete.
 * Disables ftrace.
@@ -84,7 +88,7 @@ or
 4. Build the system.
 5. Run the built image with QEMU:
 ```
-qemu-system-aarch64 -M virt -m 512M -cpu cortex-a72 -nographic -smp 2 -kernel output/images/Image
+qemu-system-aarch64 -M virt -m 2048M -cpu cortex-a72 -nographic -smp 2 -kernel output/images/Image -append "trace_buf_size=256M"
 ```
 5. Recreate the log inside the VM:
 ```
