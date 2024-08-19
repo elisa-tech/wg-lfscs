@@ -94,7 +94,7 @@ void set_irq_affinity(int cpu) {
 	snprintf(cpu_mask, sizeof(cpu_mask), "%x", 1 << cpu);
 
 	while (fgets(line, sizeof(line), file)) {
-		if (sscanf(line, " %15[^:]: %*s %*s %*s %127s", irq, irq_name) == 2) {
+		if (sscanf(line, " %15[^:]: %*s %*s %*s %[^\n]", irq, irq_name) == 2) {
 			char *endptr;
 			long irq_num = strtol(irq, &endptr, 10);
 			if (*endptr != '\0') {
