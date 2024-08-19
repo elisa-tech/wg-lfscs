@@ -10,6 +10,7 @@
 #include <sched.h>
 #include <dirent.h>
 #include <ctype.h>
+#include <limits.h>
 
 volatile int *semaphore;
 
@@ -56,6 +57,27 @@ void disable_ftrace() {
 	close(fd);
 }
 
+int is_number(const char *str) {
+	char *endptr;
+	errno = 0;
+	long val = strtol(str, &endptr, 10);
+
+	if (str == NULL || *str == '\0') {
+		return 0;
+	}
+	if (errno == ERANGE && (val == LONG_MAX || val == LONG_MIN)) {
+		return 0;
+	}
+	if (endptr == str) {
+		return 0;
+	}
+	if (*endptr != '\0') {
+		return 0;
+	}
+
+	return 1;
+}
+
 void set_irq_affinity(int cpu) {
 	FILE *file = fopen("/proc/interrupts", "r");
 	if (!file) {
@@ -72,9 +94,9 @@ void set_irq_affinity(int cpu) {
 	snprintf(cpu_mask, sizeof(cpu_mask), "%x", 1 << cpu);
 
 	while (fgets(line, sizeof(line), file)) {
-		if (sscanf(line, "%15s %*s %*s %*s %127s", irq, irq_name) == 2) {
-			// Ignore 'arch_timer' IRQs
-			if (strstr(irq_name, "arch_timer") == NULL) {
+		if (sscanf(line, "%15s: %*s %*s %*s %127s", irq, irq_name) == 2) {
+			// Ignore 'arch_timer' IRQs and non numer in /proc/interrupts
+			if ((strstr(irq_name, "arch_timer") == NULL) && is_number(irq)) {
 				char file_path[256];
 				snprintf(file_path, sizeof(file_path), "/proc/irq/%s/smp_affinity", irq);
 				printf("Setting %s affinity\n", file_path);
