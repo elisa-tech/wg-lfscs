@@ -402,6 +402,36 @@ fundamental dependencies remained. The resulting graph (generated using these
 commands[^2] highlights these core interactions, with a detailed visualization
 available in the same[^3].
 
+# The missing clone syscall
+
+In the context of this investigation, the focus is on identifying the minimal
+features that the Linux kernel must provide to any Linux application.
+To achieve this, a minimal application: one that does nothing and makes no
+explicit system calls—was executed on a stripped-down kernel. The findings
+demonstrate that the only system call directly involved in executing this
+minimal application is `execve`. By tracing `execve`, we dissected the various
+functions and subsystems it interacts with, providing insight into the core
+mechanisms required for process execution.
+
+It is important to clarify why the `clone` system call, which underlies fork,
+has not been considered in this analysis.
+The fundamental reason is that the minimal process under investigation does
+not explicitly invoke `clone`; rather, it is the result of a `clone`
+invocation by an ancestor process. The `clone` system call is executed by
+the parent process that creates the new task, not by the process itself.
+
+While in the typical case, a process is spawned via `fork` (or `clone`),
+leading to the eventual invocation of `execve`, this is not the only
+scenario. A notable exception occurs during system boot, where the kernel
+itself is responsible for creating the first process without an explicit
+`clone` invocation by any user-space ancestor. 
+
+Specifically, the `start_kernel` function directly leads to `kernel_execve`, 
+bypassing the usual user-space process creation mechanisms.
+
+This distinction underscores why `clone` is not a necessary feature for the
+minimal application’s execution and, therefore, falls outside the scope of
+this investigation.
 
 # Unexpected findings
 
