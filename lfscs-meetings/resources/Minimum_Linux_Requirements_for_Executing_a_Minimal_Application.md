@@ -366,6 +366,8 @@ compensating for the limitations of dynamic tracing alone.
 This combined approach allows us to construct a more complete and accurate
 representation of the minimal kernel requirements for executing a basic
 application.
+In the [picture](./Minimum_Linux_Requirements_for_Executing_a_Minimal_Application.data/execve_detail.svg)
+`load_elf_binary` is added (red arrow) the the existing execve graph.
 
 #  Conclusion
 This investigation has identified the minimal set of Linux kernel subsystems
