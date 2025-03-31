@@ -1,0 +1,52 @@
+nav -f conf.json -s el0_interrupt -i 56 -m 1 -x 0 -g 1 -j graphOnly | graph-tool print -edot >el0_interrupt.dot
+nav -f conf.json -s el1_interrupt -i 56 -m 1 -x 0 -g 1 -j graphOnly | graph-tool print -edot >el1_interrupt.dot
+nav -f conf.json -s __arm64_sys_execve -i 56 -m 1 -x 0 -g 1 -j graphOnly | graph-tool print -edot >__arm64_sys_execve.dot
+nav -f conf.json -s load_elf_binary -i 56 -m 1 -x 0 -g 1 -j graphOnly | graph-tool print -edot >load_elf_binary.dot
+
+cat ftrace.log |\
+	awk 'NR> 32919{print }'|\
+	graph-tool ftrace2graph|\
+	graph-tool complete -f2 el0_interrupt.dot -color green|\
+	graph-tool complete -f2 el1_interrupt.dot -color green|\
+	graph-tool complete -f2 __arm64_sys_execve.dot -color green|\
+	graph-tool complete -f2 load_elf_binary.dot -color green|\
+	graph-tool complete -color green -f2 __arm64_sys_execve.dot|\
+	graph-tool complete -color green -f2 load_elf_binary.dot > execution_graph.dot
+
+cat ~/go/src/graphs/ftrace.log|\
+	awk 'NR> 32919{print }'|\
+	graph-tool ftrace2graph|\
+	graph-tool complete -f2 el0_interrupt.dot -color green|\
+	graph-tool complete -f2 el1_interrupt.dot -color green|\
+	graph-tool complete -f2 __arm64_sys_execve.dot -color green|\
+	graph-tool complete -f2 load_elf_binary.dot -color green|\
+        graph-tool followpath -snode __arm64_sys_execve.dot -color magenta > execution_graph___arm64_sys_execve.dot 
+
+cat ftrace.log|\
+	awk 'NR> 32919{print }'|\
+	graph-tool ftrace2graph|\
+	graph-tool complete -f2 el0_interrupt.dot -color green|\
+	graph-tool complete -f2 ~/go/src/graphs/el1_interrupt.dot -color green|\
+	graph-tool complete -f2 __arm64_sys_execve.dot -color green|\
+	graph-tool complete -f2 load_elf_binary.dot -color green|\
+	graph-tool followpath -snode el0_interrupt -color magenta |\
+	graph-tool followpath -snode el1_interrupt -color magenta >execution_graph_interrupt.dot 
+
+cat ftrace.log|\
+	awk 'NR> 32919{print }'|\
+	graph-tool ftrace2graph|\
+	graph-tool complete -f2 el0_interrupt.dot -color green|\
+	graph-tool complete -f2 el1_interrupt.dot -color green|\
+	graph-tool complete -f2 __arm64_sys_execve.dot -color green|\
+	graph-tool complete -f2 load_elf_binary.dot -color green|\
+	graph-tool followpath -snode el0_ia -color magenta > execution_graph_el0_ia.dot
+
+cat only____arm64_sys_execve.dot | grep " -> "| cut -d"\"" -f2,4| tr "\"" "\n" | sort|uniq
+cat only_elx_interrupt.dot | grep " -> "| cut -d"\"" -f2,4| tr "\"" "\n" | sort|uniq
+cat only_el0_ia.dot | grep " -> "| cut -d"\"" -f2,4| tr "\"" "\n" | sort|uniq
+
+
+
+for i in $(cat only____arm64_sys_execve.dot | grep " -> "| cut -d"\"" -f2,4| tr "\"" "\n" | sort|uniq); do ssh dbs "psql kernel_bin -tAF, -c \"select subsys_name from tags where tag_file_ref_id in (select symbol_file_ref_id from symbols where symbol_name ='$i' and symbol_instance_id_ref = 56);\"" 2>/dev/null; done |sort | uniq |tee only____arm64_sys_execve.subs
+for i in $(cat only_elx_interrupt.dot | grep " -> "| cut -d"\"" -f2,4| tr "\"" "\n" | sort|uniq); do ssh dbs "psql kernel_bin -tAF, -c \"select subsys_name from tags where tag_file_ref_id in (select symbol_file_ref_id from symbols where symbol_name ='$i' and symbol_instance_id_ref = 56);\"" 2>/dev/null; done |sort | uniq |tee only_elx_interrupt.subs
+for i in $(cat only_el0_ia.dot | grep " -> "| cut -d"\"" -f2,4| tr "\"" "\n" | sort|uniq); do ssh dbs "psql kernel_bin -tAF, -c \"select subsys_name from tags where tag_file_ref_id in (select symbol_file_ref_id from symbols where symbol_name ='$i' and symbol_instance_id_ref = 56);\"" 2>/dev/null; done |sort | uniq |tee only_el0_ia.subs
