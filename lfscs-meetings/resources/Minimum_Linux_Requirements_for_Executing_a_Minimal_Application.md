@@ -86,6 +86,16 @@ features that will always be used, and those that are considered optional,
 while recognizing that in some use cases, the so-called optional features may
 be essential for a given application to function properly.
 
+**Disclaimer**: Because of the carefully crafted test program and setup used 
+during the investigation, it should not be assumed that these findings will 
+apply to any custom-made payload, which is likely going to exert many more 
+functionalities, which here remain dormant, due to lack of activation.
+
+The test program used here probably represents the most favorable 
+application one might run, and no real-world safety design should use it 
+as a reference for justifying the omission of additional safety analysis.
+
+
 # Objectives and Scope
 
 ## **Objective**
