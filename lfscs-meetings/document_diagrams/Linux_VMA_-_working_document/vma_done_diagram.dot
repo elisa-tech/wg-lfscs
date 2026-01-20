@@ -38,7 +38,7 @@ digraph KernelVA_Map {
       </TD></TR>
 
       <TR><TD PORT="vmalloc" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
-        <B>Virtual mappings of arbitrary PFNs (including executable pages)                                        </B><BR/>
+        <B>vmalloc / vmap region (including executable pages)                                        </B><BR/>
         - vmalloc(), vmap()<BR/>
         - dynamic kernel mappings<BR/>
         - often hosts: BPF JIT, ftrace, livepatch
