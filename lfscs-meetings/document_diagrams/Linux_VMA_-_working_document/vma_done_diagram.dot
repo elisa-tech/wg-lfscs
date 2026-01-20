@@ -32,6 +32,11 @@ digraph KernelVA_Map {
         - intentional unmapped ranges
       </TD></TR>
 
+      <TR><TD PORT="vmemmap" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>vmemmap</B><BR/>
+        - virtual mapping of struct page array
+      </TD></TR>
+
       <TR><TD PORT="vmalloc" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
         <B>Virtual mappings of arbitrary PFNs (including executable pages)                                        </B><BR/>
         - vmalloc(), vmap()<BR/>
@@ -46,14 +51,17 @@ digraph KernelVA_Map {
         - init sections may be freed
       </TD></TR>
 
+      <TR><TD PORT="kimage" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>Kernel image</B><BR/>
+        - vmlinux text (RX)<BR/>
+        - rodata (RO)<BR/>
+        - data (RW)<BR/>
+        - KASLR may randomize base
+      </TD></TR>
+
       <TR><TD PORT="mmio" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
         <B>I/O remap / MMIO</B><BR/>
         - device register mappings (BARs / SoC)
-      </TD></TR>
-
-      <TR><TD PORT="vmemmap" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
-        <B>vmemmap</B><BR/>
-        - virtual mapping of struct page array
       </TD></TR>
 
       <TR><TD PORT="percpu" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
@@ -69,14 +77,6 @@ digraph KernelVA_Map {
         - kernel stacks<BR/>
         - tables<BR/>
         - kernel objects
-      </TD></TR>
-
-      <TR><TD PORT="kimage" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
-        <B>Kernel image</B><BR/>
-        - vmlinux text (RX)<BR/>
-        - rodata (RO)<BR/>
-        - data (RW)<BR/>
-        - KASLR may randomize base
       </TD></TR>
 
       <TR><TD PORT="user" ALIGN="CENTER" BGCOLOR="darkolivegreen1"  cellpadding="200" ><B>User memory</B></TD></TR>
