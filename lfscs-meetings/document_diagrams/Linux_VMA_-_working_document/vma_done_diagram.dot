@@ -1,0 +1,173 @@
+digraph KernelVA_Map {
+  rankdir=TB;
+  splines=true;
+  nodesep=0.0;
+  ranksep=0.0;
+  layout=circo;
+  mindist=0.0;
+  
+  node [fontname="monospace", fontsize=15];
+  edge [fontname="monospace", fontsize=9, arrowsize=1.5];
+
+  KernelVA [shape=none, label=<
+    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8">
+      <TR><TD PORT="high" ALIGN="CENTER"><B>High virtual addresses</B></TD></TR>
+
+      <TR><TD PORT="fixmap" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>Fixmap / Fixed mappings</B><BR/>
+        - fixed VA slots<BR/>
+        - early ioremap helpers<BR/>
+        - CPU entry / trampolines<BR/>
+        - vsyscall (legacy)
+      </TD></TR>
+
+      <TR><TD PORT="cpu_entry" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="rosybrown1">
+        <B>CPU entry / trampoline</B><BR/>
+        - entry code<BR/>
+        - entry stacks (arch-dependent)
+      </TD></TR>
+
+      <TR><TD PORT="holes" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="rosybrown1">
+        <B>Guard holes / unmapped gaps</B><BR/>
+        - intentional unmapped ranges
+      </TD></TR>
+
+      <TR><TD PORT="vmalloc" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>Virtual mappings of arbitrary PFNs (including executable pages)                                        </B><BR/>
+        - vmalloc(), vmap()<BR/>
+        - dynamic kernel mappings<BR/>
+        - often hosts: BPF JIT, ftrace, livepatch
+      </TD></TR>
+
+      <TR><TD PORT="modules" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>Modules area</B><BR/>
+        - module text / rodata / data<BR/>
+        - W^X transitions during load<BR/>
+        - init sections may be freed
+      </TD></TR>
+
+      <TR><TD PORT="mmio" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>I/O remap / MMIO</B><BR/>
+        - device register mappings (BARs / SoC)
+      </TD></TR>
+
+      <TR><TD PORT="vmemmap" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>vmemmap</B><BR/>
+        - virtual mapping of struct page array
+      </TD></TR>
+
+      <TR><TD PORT="percpu" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>Per-CPU area</B><BR/>
+        - per-cpu variables / allocations
+      </TD></TR>
+
+      <TR><TD PORT="linear" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="darkolivegreen1">
+        <B>Linear / direct map (physmap)</B><BR/>
+        - RAM mapped 1:1 at fixed offset<BR/>
+        - slabs<BR/>
+        - page allocator<BR/>
+        - kernel stacks<BR/>
+        - tables<BR/>
+        - kernel objects
+      </TD></TR>
+
+      <TR><TD PORT="kimage" ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="khaki1">
+        <B>Kernel image</B><BR/>
+        - vmlinux text (RX)<BR/>
+        - rodata (RO)<BR/>
+        - data (RW)<BR/>
+        - KASLR may randomize base
+      </TD></TR>
+
+      <TR><TD PORT="user" ALIGN="CENTER" BGCOLOR="darkolivegreen1"  cellpadding="200" ><B>User memory</B></TD></TR>
+    </TABLE>
+  >];
+
+  { rank=same; KernelVA; }
+
+  node [shape=box, style="rounded", margin="0.12,0.08", fontsize=25];
+
+  T_init   [label="Process address space init\n(fork/execve, init PID 1)", width=5.8, color="red", fontcolor="red", fillcolor="lightyellow1", style=filled];
+  T_sys    [label="Syscalls that create/modify VMAs\n(mmap, mprotect, munmap, brk,\nmlock, mremap, userfaultfd)", width=6.8, color="blue", fontcolor="blue", fillcolor="lightyellow1", style=filled];
+  T_linear [label="Linear mapping problem\n(unified RAM, adjacency, \ncorruption, propagation,\n metadata exposure)", width=5.2, color="black", fontcolor="black", fillcolor="lightyellow1", style=filled];
+  T_fault  [label="Page-fault path & VMA enforcement\n(find_vma, handle_mm_fault,\ndemand paging, COW)", width=7.1, color="forestgreen", fontcolor="forestgreen", fillcolor="lightyellow1", style=filled];
+  dummy1   [label="blabla", width=4.1, color="white", fontcolor="white"];
+  dummy2   [label="blabla", width=4.1, color="white", fontcolor="white"];
+  T_zones  [label="Physical memory zones\n(DMA/DMA32/NORMAL/MOVABLE/DEVICE,\n(highmem history))", width=3.0, color="red", fontcolor="red", fillcolor="lightyellow1", style=filled];
+  T_mm     [label="mm_struct + VMA storage/lookup\n(rbtree/maple tree)", width=6.8, color="blue", fontcolor="blue", fillcolor="lightyellow1", style=filled];
+  T_tlb    [label="TLB coherence & shootdowns\n(flush_tlb_*,\nTOCTOU, PTI impact)", width=5.8,  color="black", fontcolor="black", fillcolor="lightyellow1", style=filled];
+  T_slab   [label="SLUB / kmalloc cache hierarchy\n(per-cpu caches, node caches,\npage allocator integration)", width=6.8, color="forestgreen", fontcolor="forestgreen", fillcolor="lightyellow1", style=filled];
+  T_pressure [label="Critical memory handling\n(swap, kswapd, reclaim, PSI,\nOOM killer, overcommit)", width=6.3, color="red", fontcolor="red", fillcolor="lightyellow1", style=filled];
+  T_sanit [label="Instrumentation tools\n(KASAN, KMSAN, kmemleak)", width=5.0, color="blue", fontcolor="blue", fillcolor="lightyellow1", style=filled];
+  T_cves  [label="Failure modes & CVEs\n(Dirty COW, VMA cache corruption,\nlibbpf ringbuf mmap overflow, etc.)", width=7.4, color="black", fontcolor="black", fillcolor="lightyellow1", style=filled];
+  T_virt  [label="Virtualization & nested paging\n(EPT/NPT/Stage-2,\nguest/host TLB)", width=6.8, color="red", fontcolor="red", fillcolor="lightyellow1", style=filled];
+  T_arch  [label="MMU architecture differences\n(x86 vs ARM vs RISC-V,\n page sizes, ordering/barriers)", width=6.8, color="blue", fontcolor="blue", fillcolor="lightyellow1", style=filled];
+  dummy3   [label="blabla", width=4.1, color="white", fontcolor="white"];
+  dummy4   [label="blabla", width=4.1, color="white", fontcolor="white"];
+  T_highmem [label="Proposal: highmem-like reserved pool\nfor safety-critical processes\n(+memfd_secret discussion)", width=7.7, color="black", fontcolor="black", fillcolor="lightyellow1", style=filled];
+  T_modules [label="Kernel loadable modules deep dive\n(module_alloc, MODULES_VADDR..END,\nsection splitting,\nRWX controls, KASLR interactions)", width=7.2, color="forestgreen", fontcolor="forestgreen"];
+  T_mmio  [label="I/O mappings & interference types\n(MMIO, ioremap, DMA-related hazards)", width=7.3, color="black", fontcolor="black", fillcolor="lightyellow1", style=filled];
+
+  dummy1  -> KernelVA:high [color=white, style=invis];
+  dummy2  -> KernelVA:high [color=white, style=invis];
+  dummy3  -> KernelVA:user [color=white, style=invis];
+  dummy4  -> KernelVA:user [color=white, style=invis];
+
+  // User address space lifecycle & VMA syscalls
+  T_init  -> KernelVA:user [color=red];
+  T_sys   -> KernelVA:user [color=blue];
+
+  // VMA data structures
+  T_mm    -> KernelVA:user [color=blue];
+
+  // Page-fault enforcement touches both user VMAs and kernel allocators
+  T_fault -> KernelVA:user [color=forestgreen];
+  T_fault -> KernelVA:linear [color=forestgreen];
+
+  // TLB management
+  T_tlb   -> KernelVA:user [color=black];
+  T_tlb   -> KernelVA:kimage [color=black];
+  T_tlb   -> KernelVA:linear [color=black];
+
+  // Linear mapping risk analysis
+  T_linear -> KernelVA:linear [color=black];
+  T_zones  -> KernelVA:linear [color=red];
+  T_slab   -> KernelVA:linear [color=forestgreen];
+  T_slab   -> KernelVA:percpu [color=forestgreen];
+
+  // Memory pressure/OOM
+  T_pressure -> KernelVA:linear [color=red];
+  T_pressure -> KernelVA:user [color=red];
+
+  // Sanitizers observe/check memory across regions
+  T_sanit -> KernelVA:linear [color=blue];
+  T_sanit -> KernelVA:vmalloc [color=blue];
+  T_sanit -> KernelVA:modules [color=blue];
+
+  // CVEs/failure modes map to the areas they stress in the doc
+  T_cves  -> KernelVA:user;
+  T_cves  -> KernelVA:linear;
+
+  // vmemmap discussion
+  T_linear -> KernelVA:vmemmap [color=black];
+  T_slab   -> KernelVA:vmemmap [color=forestgreen];
+
+  // MMIO / ioremap
+  T_mmio  -> KernelVA:mmio;
+  T_mmio  -> KernelVA:vmalloc;
+
+  // Modules deep dive
+  T_modules -> KernelVA:modules [color=forestgreen];
+  T_modules -> KernelVA:kimage [color=forestgreen];
+
+  // Highmem / reserved pool proposal uses fixmap/kmap
+  T_highmem -> KernelVA:linear [color=black];
+  T_highmem -> KernelVA:fixmap [color=black];
+
+  // Virtualization + arch differences
+  T_virt -> KernelVA:user [color=red];
+  T_virt -> KernelVA:linear [color=red];
+
+  T_arch -> KernelVA:user [color=blue];
+  T_arch -> KernelVA:linear [color=blue];
+}
