@@ -1,0 +1,4 @@
+config BR2_PACKAGE_VM_LATENCY_DEMO
+	bool "vm_latency_demo"
+	help
+	  Small VM latency demo for anonymous mmap read/write timing.
