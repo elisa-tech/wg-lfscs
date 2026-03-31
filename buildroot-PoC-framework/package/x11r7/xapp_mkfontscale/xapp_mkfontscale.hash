@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-March/003471.html
+sha256  2921cdc344f1acee04bcd6ea1e29565c1308263006e134a9ee38cf9c9d6fe75e  mkfontscale-1.2.3.tar.xz
+sha512  816e7b2885bb7a4b2eb0e506b659600011bfa4ec1a3010243c2cc2241fa0b792f3c8de1dec1855a4d13de89405973967074e379b0d01dcf9de8a1277a2fc4296  mkfontscale-1.2.3.tar.xz
+# Locally computed
+sha256  7555388a38693cccb140946065534f4b7743aa334c883209a34f41abaeb62bd1  COPYING

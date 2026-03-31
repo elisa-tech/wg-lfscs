@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-April/003506.html
+sha256  2c1bacd2110f4799f74de6ebb714b94cf6f80fb112316b1219480fd22562148c  xcb-proto-1.17.0.tar.xz
+sha512  34c3795e5a48a66d89b72ee1777fb0bede489d5ec07018e6c9ef3c13bdd60b0358fc2c04a1f0ed0acb5b681aeeb92033db579036e4f5edd967fe56714c03acdf  xcb-proto-1.17.0.tar.xz
+# Locally computed
+sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING

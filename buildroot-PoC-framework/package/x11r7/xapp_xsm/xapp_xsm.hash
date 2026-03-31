@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-March/003479.html
+sha256  b74cc774c6060c37592f68a90dbd31b0f2a62fb14e562769434f79be284a63ce  xsm-1.0.6.tar.xz
+sha512  ee4e9b4ab6be6773e53685540f807b03d553bfecc26c4e85fe12daca486fdeb66c594c6eab54043a8c149112c7a3ed18e463d68d7aee62e93a06c091ce39c268  xsm-1.0.6.tar.xz
+# Locally computed
+sha256  5531d18cfcc944dab39991f63f182cbbce3fe493ba0c7cf08a25c0d01ee84482  COPYING

@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2025-July/003616.html
+sha256  dc1de6e6e091ed46c4837b0ae9811e8182f7be0d2af638cab3e530ff081a48b6  xdpyinfo-1.4.0.tar.xz
+sha512  478dd3de58950eeca213a51820445e62a5a63b2fa9ff3505f22802a7980f855fc11f1465e57ff4c34cdf8df0a0ff3c576804ef44f11f3b52c1c9da4ecc5a62d3  xdpyinfo-1.4.0.tar.xz
+# Locally computed
+sha256  49733ead65fdfa1da0d176f9b965cc08dae74d73d66c9606488d52f6fc036abf  COPYING

@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-October/003540.html
+sha256  f20bed5ac201edd517fe0878dd2bcef78c8805c9f7faa3d0d7a4dba2e973f745  xf86-video-r128-6.13.0.tar.xz
+sha512  6eae2a4f3a563d00c357025ffd3206c2b20cd35327af21add052a28447da9c0f642569bfb423cacb8989995bc92fc73cddd96d673e64438d1d7569eb926fb2ae  xf86-video-r128-6.13.0.tar.xz
+# Locally computed
+sha256  69f7c71859dc8f51aabdbe7a9ee915a480933eb81658f8af2bf4c918e65afe8b  COPYING

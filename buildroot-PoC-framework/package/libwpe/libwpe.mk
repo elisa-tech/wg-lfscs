@@ -1,0 +1,19 @@
+################################################################################
+#
+# libwpe
+#
+################################################################################
+
+# The middle number is even for stable releases, odd for development ones.
+LIBWPE_VERSION = 1.16.3
+LIBWPE_SITE = https://wpewebkit.org/releases
+LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+LIBWPE_INSTALL_STAGING = YES
+LIBWPE_LICENSE = BSD-2-Clause
+LIBWPE_LICENSE_FILES = COPYING
+LIBWPE_DEPENDENCIES = libegl libxkbcommon
+
+LIBWPE_CFLAGS = $(TARGET_CFLAGS)
+LIBWPE_CXXFLAGS = $(TARGET_CXXFLAGS)
+
+$(eval $(meson-package))

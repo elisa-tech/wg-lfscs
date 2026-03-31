@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2025-May/003604.html
+sha256  4b221c2b103390b166633612b9abf8036cbbe90605dbd8a37cf2a377fa2b6cd2  viewres-1.0.8.tar.xz
+sha512  3cd5dc23ab1b3289eb1433cf7373cc4edab84ef39166013056d4ffad90bb4f926e7471f7691a4c6bcb81cf6bfd203478a0ae2fb53300e838b1c5d1cc82ff8da0  viewres-1.0.8.tar.xz
+# Locally computed
+sha256  aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING

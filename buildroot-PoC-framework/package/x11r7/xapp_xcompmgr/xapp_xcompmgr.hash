@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-November/003555.html
+sha256  7824f709c4f22432eaea7542ec93384e5dd48f6fcb85c12ff82d721423b0b98f  xcompmgr-1.1.10.tar.xz
+sha512  6dd5c72d6859489580dabdb96e3b572931cec7c426022213007c92df2d805a8f01a7f3dc5e8493f6e550bb809f71a50ca1630f50555d47b8d5b4b2726d7b8b12  xcompmgr-1.1.10.tar.xz
+# Locally computed
+sha256  c843545f72771b3ff95eb88defc2e3ed8f9a1802d9bb6c32c196bb5eec3d3a5d  COPYING

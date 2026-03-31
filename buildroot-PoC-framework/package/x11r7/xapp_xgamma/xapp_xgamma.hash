@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2025-July/003620.html
+sha256  98f9f69e53a11c354a6637ea5c3d7699ceb5c5b1f8ad6f0a14d9931e5a10d079  xgamma-1.0.8.tar.xz
+sha512  edaa33fc18a9eb9e3bf5395ca0f6196778d0f8d8007e94ed53fc26de236bda51ee06a3eb8d0543a9e4367d3a350e7571664032e963001b7b6d525c27a3b3e8b6  xgamma-1.0.8.tar.xz
+# Locally computed
+sha256  78d354d348feaaab8d67a220e84137ec24fece04af4dface2e67132c72e216a2  COPYING

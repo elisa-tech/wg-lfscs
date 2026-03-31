@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-October/003538.html
+sha256  d6b96b47a27cd2dc6dea612f5dc51fcc1a8561d5ad1d48d04ec2d47751222724  xf86-video-mach64-6.10.0.tar.xz
+sha512  1f40114062e320aedaeba5e68e08fd747afc45c03cb0cc4445cdc5ba94aa65b71dd63a19741d0e3dab34cc3cd914d991fad4350fadf39192d753817ec2011cdc  xf86-video-mach64-6.10.0.tar.xz
+# Locally computed
+sha256  a7d68021893bced0d709338a59a137c74b11e624880e110e4a2f14ccef475120  COPYING

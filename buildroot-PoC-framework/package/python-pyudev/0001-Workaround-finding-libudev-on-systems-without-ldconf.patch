@@ -1,0 +1,53 @@
+From e86a1c199d45c9751da67f947af202927dee07f8 Mon Sep 17 00:00:00 2001
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 10 Dec 2015 08:44:55 +0100
+Subject: [PATCH] Workaround finding libudev on systems without ldconf
+
+This patch tries to load libudev.so directly without relying on
+Python's find_library(). find_library() fails on systems
+without library cache mechanism.
+
+Taken from pyudev issue 117 discussion:
+https://github.com/pyudev/pyudev/pull/117
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Marcin: adjust to 0.22.0]
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+[Fabrice: Use %-formatting instead of f-string for python 2]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Bernd: rebased for version 0.24.4]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ src/pyudev/_ctypeslib/utils.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/pyudev/_ctypeslib/utils.py b/src/pyudev/_ctypeslib/utils.py
+index 9dffb3c..aa9942f 100644
+--- a/src/pyudev/_ctypeslib/utils.py
++++ b/src/pyudev/_ctypeslib/utils.py
+@@ -24,7 +24,7 @@
+ """
+ 
+ # isort: STDLIB
+-from ctypes import CDLL
++from ctypes import cdll, CDLL
+ from ctypes.util import find_library
+ 
+ 
+@@ -46,10 +46,10 @@ def load_ctypes_library(name, signatures, error_checkers):
+     :rtype: ctypes.CDLL
+     :raises ImportError: if the library is not found
+     """
+-    library_name = find_library(name)
+-    if not library_name:
++    try:
++        lib = cdll.LoadLibrary('lib%s.so' % name)
++    except OSError:
+         raise ImportError(f"No library named {name}")
+-    lib = CDLL(library_name, use_errno=True)
+     # Add function signatures
+     for funcname, signature in signatures.items():
+         function = getattr(lib, funcname, None)
+-- 
+2.29.1
+

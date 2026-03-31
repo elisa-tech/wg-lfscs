@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/pytest/json
+md5  ce26088b3b97ab8fed58c8883de23241  pytest-9.0.2.tar.gz
+sha256  75186651a92bd89611d1d9fc20f0b4345fd827c41ccd5c299a868a05d70edf11  pytest-9.0.2.tar.gz
+# Locally computed sha256 checksums
+sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE

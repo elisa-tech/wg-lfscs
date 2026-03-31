@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-January/003445.html
+sha256  cffb10e2488b09695da8377f395a4fed6d33f5eb9691322ebaa969e8ead7b0c2  xbiff-1.0.5.tar.xz
+sha512  4dd8943daf670dffb6e108b192977f6ad313d6b0535da0c809699e05f0509aba45be81c72af341e1fef31f59d0a5f209d87441230b3fdcecb4a7a8fe7a9c0658  xbiff-1.0.5.tar.xz
+# Locally computed
+sha256  9b840f2e1900889124cc999f3158da2b6b07bf6d0d77bdbb01ce65d2e702dc83  COPYING

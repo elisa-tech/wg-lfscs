@@ -1,0 +1,61 @@
+menu "Linux Kernel Extensions"
+
+#-------------------------------------------------------------------------------
+# Xenomai
+config BR2_LINUX_KERNEL_EXT_XENOMAI
+	bool "Adeos/Xenomai Real-time patch"
+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+	depends on BR2_USE_MMU # xenomai
+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # xenomai
+	depends on BR2_TOOLCHAIN_HAS_THREADS # xenomai
+	depends on !BR2_TOOLCHAIN_USES_MUSL # xenomai
+	select BR2_PACKAGE_XENOMAI
+	help
+	  Xenomai is split in two parts: a kernel part and a userspace
+	  part. Enabling this option automatically selects the Xenomai
+	  package and helps in patching the Linux kernel built by
+	  Buildroot with the Xenomai kernel part (ie Adeos/Ipipe).
+
+	  You can find the currently supported kernel versions by
+	  looking at the available patches in the Xenomai sources
+	  tree: ksrc/arch/$(ARCH)/patches
+
+	  However, it is recommended to use the latest version of the
+	  Adeos/Ipipe patch available at
+	  https://xenomai.org/downloads/ipipe/
+
+	  Xenomai is know to support Blackfin, SH4, x86, ARM, NIOS2
+	  and PowerPC architectures.
+
+config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+	string "Path/URL for Adeos patch file"
+	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
+	help
+	  Optionally, explicitly specify where to find the Adeos
+	  patch to use.
+	  Examples:
+	  https://xenomai.org/downloads/ipipe/v4.x/arm/ipipe-core-4.19.33-arm-2.patch
+	  or /home/foo/ipipe-core-4.19.33-arm-2.patch
+	  Please verify that your kernel version in Buildroot matches.
+
+comment "xenomai needs a uClibc or glibc toolchain w/ threads"
+	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+	depends on BR2_USE_MMU
+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+
+#-------------------------------------------------------------------------------
+# RTAI
+config BR2_LINUX_KERNEL_EXT_RTAI
+	bool "RTAI Real-time patch"
+	depends on !BR2_LINUX_KERNEL_LATEST_VERSION
+	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+	select BR2_PACKAGE_RTAI
+	help
+	  RTAI Kernel part.
+
+# kernel extensions from br2-external trees, if any
+source "$BR2_BASE_DIR/.br2-external.in.linux"
+
+endmenu

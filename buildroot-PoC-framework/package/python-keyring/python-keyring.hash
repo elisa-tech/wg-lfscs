@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/keyring/json
+md5  57c23d340e4d08ac4896f142ee423eca  keyring-25.7.0.tar.gz
+sha256  fe01bd85eb3f8fb3dd0405defdeac9a5b4f6f0439edbb3149577f244a2e8245b  keyring-25.7.0.tar.gz
+# Locally computed sha256 checksums
+sha256  5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d  LICENSE

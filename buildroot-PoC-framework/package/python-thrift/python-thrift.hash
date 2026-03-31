@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/thrift/json
+md5  d900f4b437b1ffba7258c58c3fde40db  thrift-0.22.0.tar.gz
+sha256  42e8276afbd5f54fe1d364858b6877bc5e5a4a5ed69f6a005b94ca4918fe1466  thrift-0.22.0.tar.gz
+# Locally computed sha256 checksums
+sha256  35e2508f171c3ac2529f402c123c12f3b2ac91643f2e52b334f71f8c861be321  README.md

@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/jsonschema-specifications/json
+md5  ef8e5a762c7ef39dcfb775c81336a690  jsonschema_specifications-2025.9.1.tar.gz
+sha256  b540987f239e745613c7a9176f3edb72b832a4ac465cf02712288397832b5e8d  jsonschema_specifications-2025.9.1.tar.gz
+# Locally computed sha256 checksums
+sha256  42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c  COPYING

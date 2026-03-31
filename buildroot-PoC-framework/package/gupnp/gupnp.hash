@@ -1,0 +1,5 @@
+# Hash from: https://download.gnome.org/sources/gupnp/1.6/gupnp-1.6.9.sha256sum:
+sha256  2edb6ee3613558e62f538735368aee27151b7e09d4e2e2c51606833da801869b  gupnp-1.6.9.tar.xz
+
+# Hash for license file:
+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING

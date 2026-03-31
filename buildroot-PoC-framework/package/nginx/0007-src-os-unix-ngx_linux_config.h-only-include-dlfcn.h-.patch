@@ -1,0 +1,30 @@
+From 8dc9dffc1f99ac951865f3135dfb5061a08d1f85 Mon Sep 17 00:00:00 2001
+From: Martin Bark <martin@barkynet.com>
+Date: Fri, 6 May 2016 16:29:17 +0100
+Subject: [PATCH] src/os/unix/ngx_linux_config.h: only include dlfcn.h if
+ available
+
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ src/os/unix/ngx_linux_config.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/os/unix/ngx_linux_config.h b/src/os/unix/ngx_linux_config.h
+index d99358c93..612935524 100644
+--- a/src/os/unix/ngx_linux_config.h
++++ b/src/os/unix/ngx_linux_config.h
+@@ -54,10 +54,12 @@
+ #include <sys/ioctl.h>
+ #include <sys/utsname.h>        /* uname() */
+ 
+-#include <dlfcn.h>
++#include <ngx_auto_config.h>
+ 
+ 
+-#include <ngx_auto_config.h>
++#if (NGX_HAVE_DLOPEN)
++#include <dlfcn.h>
++#endif
+ 
+ 
+ #if (NGX_HAVE_CRYPT_H)

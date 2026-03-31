@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2025-May/003601.html
+sha256  4e85b52f4f65a93449753bfb00ceb5d77f3317e24d07dc23147f2f116c785350  sessreg-1.1.4.tar.xz
+sha512  836d2cfa60448de9b4af1b79693905854ba5c1135d623654bba627d125271eb74111bac2b4437a86f4cbd362695e796fc0279d4f4684f2cd5080cdd953318686  sessreg-1.1.4.tar.xz
+# Locally computed
+sha256  1274afd6bafa32e4e1c2fc7c1b2ebe2fd690f6e63faf4a54a5b1348d6928e20d  COPYING

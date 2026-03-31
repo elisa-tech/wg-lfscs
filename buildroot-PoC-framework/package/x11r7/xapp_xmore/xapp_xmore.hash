@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-February/003451.html
+sha256  7eb560dbc1de4e43c64fe491ad73907a29d734cca82a9ad82c7d3feb9cdb0a9a  xmore-1.0.4.tar.xz
+sha512  52ac9bca78431f5f830b4607ff2cc375ab90e11380e0d4d3e591689359806cc7c7ec92c713d4d65742f40407e4f407c372759e5d03e30a30dfd866e6d5c6f6f7  xmore-1.0.4.tar.xz
+# Locally computed
+sha256  eaba8f94ecdc70f7d0f7a7c44544abd198f8ef034d1c45d3b915d52194f3ee3f  COPYING

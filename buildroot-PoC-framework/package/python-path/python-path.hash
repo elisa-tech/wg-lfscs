@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/path/json
+md5  c7ab103cb96b36758daeccd1ed52b587  path-17.1.1.tar.gz
+sha256  2dfcbfec8b4d960f3469c52acf133113c2a8bf12ac7b98d629fa91af87248d42  path-17.1.1.tar.gz
+# Locally computed sha256 checksums
+sha256  5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d  LICENSE

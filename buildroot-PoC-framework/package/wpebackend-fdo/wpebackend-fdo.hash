@@ -1,0 +1,7 @@
+# From https://wpewebkit.org/releases/wpebackend-fdo-1.16.1.tar.xz.sums
+md5  a112358168e03abf4937c0cecfe1dc9d  wpebackend-fdo-1.16.1.tar.xz
+sha1  4ed9d1d568ef805f79b691baa0d1cbdff17ef453  wpebackend-fdo-1.16.1.tar.xz
+sha256  544ae14012f8e7e426b8cb522eb0aaaac831ad7c35601d1cf31d37670e0ebb3b  wpebackend-fdo-1.16.1.tar.xz
+
+# Hashes for license files:
+sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING

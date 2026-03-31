@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-November/003550.html
+sha256  d4c30b0e6f18c82f387585a737ee3b72d468c927892b08a898c41bc12248e8ee  xbacklight-1.2.4.tar.xz
+sha512  6aa39d8f4430b2b9da92afff462aebbd0f3fdef50bf6a4fc3e5c08e45ae18156dc2017b8a46cd3185b2e4b1b836d2bd7379821a6591afa3d6db395247c8193e3  xbacklight-1.2.4.tar.xz
+# Locally computed
+sha256  c9fbf1f272215babef31808c1235de8e4f7641ca5edfc4fc615b6556054b2b04  COPYING

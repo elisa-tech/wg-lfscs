@@ -1,0 +1,40 @@
+################################################################################
+#
+# mjpg-streamer
+#
+################################################################################
+
+MJPG_STREAMER_VERSION = v1.0.0-1-g310b29f4a94c46652b20c4b7b6e5cf24e532af39
+MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
+MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
+MJPG_STREAMER_LICENSE = GPL-2.0+
+MJPG_STREAMER_LICENSE_FILES = $(MJPG_STREAMER_SUBDIR)/LICENSE
+MJPG_STREAMER_DEPENDENCIES = jpeg
+MJPG_STREAMER_CONF_OPTS = -DPLUGIN_INPUT_OPENCV=OFF
+
+ifeq ($(BR2_PACKAGE_LIBGPHOTO2),y)
+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_PTP2=ON
+MJPG_STREAMER_DEPENDENCIES += host-pkgconf libgphoto2
+else
+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_PTP2=OFF
+endif
+
+ifeq ($(BR2_PACKAGE_LIBV4L),y)
+MJPG_STREAMER_DEPENDENCIES += libv4l
+endif
+
+ifeq ($(BR2_PACKAGE_PROTOBUF_C)$(BR2_PACKAGE_ZEROMQ),yy)
+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_ZMQSERVER=ON
+MJPG_STREAMER_DEPENDENCIES += host-pkgconf protobuf-c zeromq
+else
+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_ZMQSERVER=OFF
+endif
+
+ifeq ($(BR2_PACKAGE_SDL),y)
+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_VIEWER=ON
+MJPG_STREAMER_DEPENDENCIES += host-pkgconf sdl
+else
+MJPG_STREAMER_CONF_OPTS += -DPLUGIN_OUTPUT_VIEWER=OFF
+endif
+
+$(eval $(cmake-package))

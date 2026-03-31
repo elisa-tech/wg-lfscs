@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2025-January/003578.html
+sha256  e0c26adb068edd0869f87a87f5e9127922d61c0265d7692a247a91a5cc1bb5c2  xf86-input-synaptics-1.10.0.tar.xz
+sha512  deb14ba039f423c4575825ecdeb74f31e30f044a4efc7dae9c1634f841dcf7066970cd470be7e63f68eccd4899e0434d602e59c297042cb2f38ff2a3a02d7e91  xf86-input-synaptics-1.10.0.tar.xz
+# Locally computed
+sha256  e14dc9a27158cadaeea8bcc2c70069762f05adb29030a444336bfde268751dc7  COPYING

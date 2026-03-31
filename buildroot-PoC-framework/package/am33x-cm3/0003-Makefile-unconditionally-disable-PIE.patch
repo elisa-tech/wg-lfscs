@@ -1,0 +1,36 @@
+From 8d86dd4b141da8d4d4dc0002b5588389b4412df8 Mon Sep 17 00:00:00 2001
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Dec 2025 15:03:55 +0100
+Subject: [PATCH] Makefile: unconditionally disable PIE
+
+Though -nostdlib is passed in $(CFLAGS), -fno-pie must also be passed to
+avoid linking errors related to overlapping sections if toolchain
+enforces PIE.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/418a40b995e91bc66e692dfbc4b0521db3fa5fbb
+
+Upstream: N/A Buildroot specific
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 52423507f50b..9146a8b6a7da 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -ffreestanding -Wall -W
+ 	-Werror-implicit-function-declaration -Wstrict-prototypes \
+ 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
+ 	-Wempty-body -fno-strict-overflow -fno-stack-protector \
+-	-g -I$(INCLUDES) -O2 -MD
++	-fno-pie -g -I$(INCLUDES) -O2 -MD
+ LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
+ 
+ EXECUTABLE=am335x-pm-firmware.elf
+-- 
+2.43.0
+

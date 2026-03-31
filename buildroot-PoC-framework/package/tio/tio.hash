@@ -1,0 +1,5 @@
+# From https://github.com/tio/tio/releases/download/v3.9/tio-3.9.tar.xz.sha256sum:
+sha256  06fe0c22e3e75274643c017928fbc85e86589bc1acd515d92f98eecd4bbab11b  tio-3.9.tar.xz
+
+# Hash for license files:
+sha256  4c336df2e6334540d713e302281bcd35df3e03b05e4d4d62ef84bde8ae00eea9  LICENSE

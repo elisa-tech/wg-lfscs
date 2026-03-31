@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2025-July/003619.html
+sha256  ae80592b6063da928e3d0c81023709b2fa29a04fcda49f6c363ac579d97f23a2  xfsinfo-1.0.8.tar.xz
+sha512  fdba207b6fbce0f9335b712a2b25bc3be973fe1ff712373b0d1a688c130299e9ea870f34a44f24757e73e88c59bdea03d67e96efbc455030f71ef81ab4668c98  xfsinfo-1.0.8.tar.xz
+# Locally computed
+sha256  bae01fa08f30f21f9cfb75e8339d081b34e5e03d12677177f85a55b0ca41d0db  COPYING

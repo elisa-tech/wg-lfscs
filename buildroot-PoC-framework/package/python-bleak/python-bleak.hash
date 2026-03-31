@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/bleak/json
+md5  e757918dbfcba6bdfcb69e82048fc3a9  bleak-2.1.1.tar.gz
+sha256  4600cc5852f2392ce886547e127623f188e689489c5946d422172adf80635cf9  bleak-2.1.1.tar.gz
+# Locally computed sha256 checksums
+sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE

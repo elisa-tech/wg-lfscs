@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-March/003490.html
+sha256  674191160c61982199c582233c5f1df5163a09f3ecbcb3d5bb5079b31a7d10af  xf86-video-savage-2.4.1.tar.xz
+sha512  7928dafa148340e4a6c0ecd2324a69a67aa8fec55d316468c7e68fd79d1a388fd0e1f593d39b6dab0c8a5876b23e7c65c037a3285d340fa82b27ec7c2d5c8713  xf86-video-savage-2.4.1.tar.xz
+# Locally calculated
+sha256  611f4020815e3d5011a39a58f0958262715cd3becd9cb1ef14cc166fd84ec5a6  COPYING

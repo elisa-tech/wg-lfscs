@@ -1,0 +1,528 @@
+From f9a0d6d4395d5377bd1c41bebbd2190e0971beb9 Mon Sep 17 00:00:00 2001
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 12 Sep 2019 15:04:35 -0500
+Subject: [PATCH] notice read and write errors on input and output
+
+Quoting from the bug report:
+   bc (1.06-19ubuntu1) dapper; urgency=low
+   * Make dc notice read and write errors on its input and output.
+     I grepped for mentions of the strings `putc', `print', `getc',
+     `FILE', `stdin', `stdout' and `stderr' and added calls to new
+     error-checking functions unless it was clear from the
+     immediately-surrounding code that the program was exiting
+     nonzero, or would exit nonzero if the call failed.  I ignored
+     hits in lib/getopt*, which seems to pervasively ignore write
+     errors when printing usage messages, in the hope that these
+     were correct.  I _think_ I got them all.  -iwj.
+     -- Ian Jackson <iwj@ubuntu.com>  Tue,  4 Apr 2006 17:21:02 +0100
+
+Upstream:
+https://sources.debian.org/patches/bc/1.07.1-2/05_notice_read_write_errors.diff/
+
+[Reformatted to GIT for 1.0.7.1 by Matt W]
+Updated by Ryan Kavanagh <rak@debian.org> for 1.0.7.1 on 26 July 2017.
+Author: Ian Jackson <iwj@ubuntu.com>
+Origin: other
+Bug-Debian: http://bugs.debian.org/488735
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Bernd:
+ Updated to incorporate changes by Matthias Klose <doko@debian.org>
+ on 2024-03-13 that fix Debian bug https://bugs.debian.org/1065375]
+[dario: update patch for 1.08.2]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ bc/execute.c | 10 +++++++++-
+ bc/main.c    |  3 +++
+ bc/sbc.y     |  2 ++
+ bc/scan.c    |  2 ++
+ bc/scan.l    |  3 +++
+ bc/util.c    | 15 +++++++++++++--
+ dc/dc.c      |  4 ++++
+ dc/eval.c    |  2 ++
+ dc/misc.c    |  3 +++
+ dc/numeric.c |  5 +++++
+ dc/stack.c   |  2 ++
+ dc/string.c  |  3 +++
+ h/number.h   | 10 ++++++----
+ lib/number.c | 24 ++++++++++++++++++++++++
+ 14 files changed, 81 insertions(+), 7 deletions(-)
+
+diff --git a/bc/execute.c b/bc/execute.c
+index e653a9d75979..3374a38e5fb6 100644
+--- a/bc/execute.c
++++ b/bc/execute.c
+@@ -105,6 +105,7 @@ execute (void)
+ 	      }
+ 	    out_char ('\n');
+ 	  }
++	checkferror_output(stdout);
+       }
+ #endif
+ 
+@@ -225,6 +226,7 @@ execute (void)
+ 		}
+ 	    }
+ 	fflush (stdout);
++	checkferror_output(stdout);
+ 	break;
+ 
+       case 'R' : /* Return from function */
+@@ -260,6 +262,7 @@ execute (void)
+ 	if (inst == 'W') out_char ('\n');
+ 	store_var (4);  /* Special variable "last". */
+ 	fflush (stdout);
++	checkferror_output(stdout);
+ 	pop ();
+ 	break;
+ 
+@@ -343,6 +346,7 @@ execute (void)
+       case 'w' : /* Write a string to the output. */
+ 	while ((ch = byte(&pc)) != '"') out_schar (ch);
+ 	fflush (stdout);
++	checkferror_output(stdout);
+ 	break;
+ 		   
+       case 'x' : /* Exchange Top of Stack with the one under the tos. */
+@@ -550,7 +554,10 @@ execute (void)
+     {
+       signal (SIGINT, use_quit);
+       if (had_sigint)
+-	printf ("\ninterrupted execution.\n");
++	{
++	  printf ("\ninterrupted execution.\n");
++	  checkferror_output(stdout);
++	}
+     }
+ }
+ 
+@@ -585,6 +592,7 @@ input_char (void)
+ 	  out_col = 0;  /* Saw a new line */
+ 	}
+     }
++  checkferror_input(stdin);
+ 
+   /* Classify and preprocess the input character. */
+   if (isdigit(in_ch))
+diff --git a/bc/main.c b/bc/main.c
+index b388e17b55bf..ab662dd10fc7 100644
+--- a/bc/main.c
++++ b/bc/main.c
+@@ -358,6 +358,9 @@ use_quit (int sig)
+   errno = save;
+ #else
+   write (1, "\n(interrupt) Exiting bc.\n", 26);
++#ifdef READLINE
++  rl_initialize (); /* Clear readline buffer */
++#endif
+   bc_exit(0);
+ #endif
+ }
+diff --git a/bc/sbc.y b/bc/sbc.y
+index 586686b4b71f..921ab1e13144 100644
+--- a/bc/sbc.y
++++ b/bc/sbc.y
+@@ -86,7 +86,9 @@ program			: /* empty */
+ 			      if (interactive && !quiet)
+ 				{
+ 				  show_bc_version ();
++				  checkferror_output(stdout);
+ 				  welcome ();
++				  checkferror_output(stdout);
+ 				}
+ 			    }
+ 			| program input_item
+diff --git a/bc/scan.c b/bc/scan.c
+index e208c8e7b3ba..5ac4c80fd732 100644
+--- a/bc/scan.c
++++ b/bc/scan.c
+@@ -776,6 +776,7 @@ bcel_input (char *buf, int *result, int max)
+       if (bcel_len != 0)
+ 	history (hist, &histev, H_ENTER, bcel_line); 
+       fflush (stdout);
++      checkferror_output(stdout);
+     }
+ 
+   if (bcel_len <= max)
+@@ -848,6 +849,7 @@ rl_input (char *buf, int *result, int max)
+ 	add_history (rl_line); 
+       rl_line[rl_len-1] = '\n';
+       fflush (stdout);
++      checkferror_output(stdout);
+     }
+ 
+   if (rl_len <= max)
+diff --git a/bc/scan.l b/bc/scan.l
+index 958538d6fed0..009f8b196a5e 100644
+--- a/bc/scan.l
++++ b/bc/scan.l
+@@ -100,6 +100,7 @@ bcel_input (char *buf, int *result, int max)
+       if (bcel_len != 0)
+ 	history (hist, &histev, H_ENTER, bcel_line); 
+       fflush (stdout);
++      checkferror_output(stdout);
+     }
+ 
+   if (bcel_len <= max)
+@@ -172,6 +173,7 @@ rl_input (char *buf, int *result, int max)
+ 	add_history (rl_line); 
+       rl_line[rl_len-1] = '\n';
+       fflush (stdout);
++      checkferror_output(stdout);
+     }
+ 
+   if (rl_len <= max)
+@@ -296,6 +298,7 @@ limits return(Limits);
+ 	    if (c == EOF)
+ 	      {
+ 		fprintf (stderr,"EOF encountered in a comment.\n");
++                checkferror_output(stderr);
+ 		break;
+ 	      }
+ 	  }
+diff --git a/bc/util.c b/bc/util.c
+index 7abc2a0af309..ce7cc404fb0b 100644
+--- a/bc/util.c
++++ b/bc/util.c
+@@ -248,9 +248,10 @@ init_gen (void)
+   continue_label = 0;
+   next_label  = 1;
+   out_count = 2;
+-  if (compile_only) 
++  if (compile_only) {
+     printf ("@i");
+-  else
++    checkferror_output(stdout);
++  } else
+     init_load ();
+   had_error = FALSE;
+   did_gen = FALSE;
+@@ -273,6 +274,7 @@ generate (const char *str)
+ 	  printf ("\n");
+ 	  out_count = 0;
+ 	}
++      checkferror_output(stdout);
+     }
+   else
+     load_code (str);
+@@ -290,6 +292,7 @@ run_code(void)
+       if (compile_only)
+ 	{
+ 	  printf ("@r\n"); 
++	  checkferror_output(stdout);
+ 	  out_count = 0;
+ 	}
+       else
+@@ -327,6 +330,7 @@ out_char (int ch)
+ 	}
+       putchar (ch);
+     }
++  checkferror_output(stdout);
+ }
+ 
+ /* Output routines: Write a character CH to the standard output.
+@@ -356,6 +360,7 @@ out_schar (int ch)
+ 	}
+       putchar (ch);
+     }
++  checkferror_output(stdout);
+ }
+ 
+ 
+@@ -640,6 +645,7 @@ limits(void)
+ #ifdef OLD_EQ_OP
+   printf ("Old assignment operatiors are valid. (=-, =+, ...)\n");
+ #endif 
++  checkferror_output(stdout);
+ }
+ 
+ /* bc_malloc will check the return value so all other places do not
+@@ -704,6 +710,7 @@ yyerror (str, va_alist)
+   fprintf (stderr,"%s %d: ",name,line_no);
+   vfprintf (stderr, str, args);
+   fprintf (stderr, "\n");
++  checkferror_output(stderr);
+   had_error = TRUE;
+   va_end (args);
+ }
+@@ -744,6 +751,7 @@ ct_warn (mesg, va_alist)
+       fprintf (stderr,"%s %d: Error: ",name,line_no);
+       vfprintf (stderr, mesg, args);
+       fprintf (stderr, "\n");
++      checkferror_output(stderr);
+       had_error = TRUE;
+     }
+   else
+@@ -756,6 +764,7 @@ ct_warn (mesg, va_alist)
+ 	fprintf (stderr,"%s %d: (Warning) ",name,line_no);
+ 	vfprintf (stderr, mesg, args);
+ 	fprintf (stderr, "\n");
++	checkferror_output(stderr);
+       }
+   va_end (args);
+ }
+@@ -790,6 +799,7 @@ rt_error (mesg, va_alist)
+   va_end (args);
+   
+   fprintf (stderr, "\n");
++  checkferror_output(stderr);
+   runtime_error = TRUE;
+ }
+ 
+@@ -824,6 +834,7 @@ rt_warn (const char *mesg)
+   va_end (args);
+ 
+   fprintf (stderr, "\n");
++  checkferror_output(stderr);
+ }
+ 
+ /* bc_exit: Make sure to reset the edit state. */
+diff --git a/dc/dc.c b/dc/dc.c
+index 92a843cbdcdc..c5ea5753c91e 100644
+--- a/dc/dc.c
++++ b/dc/dc.c
+@@ -36,6 +36,7 @@
+ #endif
+ #include "../h/getopt.h"
+ #include "dc.h"
++#include "../h/number.h"
+ 
+ const char *progname;	/* basename of program invocation */
+ unsigned int max_recursion_depth=0;
+@@ -44,6 +45,7 @@ static void
+ bug_report_info(void)
+ {
+ 	printf("Email bug reports to:  bug-dc@gnu.org .\n");
++	checkferror_output(stdout);
+ }
+ 
+ static void
+@@ -54,6 +56,7 @@ show_version(void)
+ This is free software; see the source for copying conditions.  There is NO\n\
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE,\n\
+ to the extent permitted by law.\n", DC_COPYRIGHT);
++	checkferror_output(stdout);
+ }
+ 
+ /* your generic usage function */
+@@ -71,6 +74,7 @@ Usage: %s [OPTION] [file ...]\n\
+ \n\
+ ", progname);
+ 	bug_report_info();
++	checkferror_output(f);
+ }
+ 
+ /* returns a pointer to one past the last occurrence of c in s,
+diff --git a/dc/eval.c b/dc/eval.c
+index 30d0a20381d1..26e6d21256f9 100644
+--- a/dc/eval.c
++++ b/dc/eval.c
+@@ -33,6 +33,7 @@
+ # include <unistd.h> /* isatty */
+ #endif
+ #include "dc.h"
++#include "../h/number.h"
+ 
+ typedef enum {
+ 	DC_OKAY,	//no further intervention needed for this command
+@@ -421,6 +422,7 @@ dc_nextcmd(void)
+ 				||  tmpint < 2  ||  DC_IBASE_MAX < tmpint) {
+ 			fprintf(stderr, "%s: input base must be a number "
+ 					"between 2 and %d (inclusive)\n", progname, DC_IBASE_MAX);
++			checkferror_output(stderr);
+ 			break;
+ 		}
+ 		dc_discard_TOS();
+diff --git a/dc/misc.c b/dc/misc.c
+index e64f62aca1e9..17e337792a84 100644
+--- a/dc/misc.c
++++ b/dc/misc.c
+@@ -31,12 +31,14 @@
+ #include <ctype.h>
+ #include "dc.h"
+ #include "../config.h"
++#include "../h/number.h"
+ 
+ /* print a simple warning message */
+ void
+ dc_warn(const char *msg)
+ {
+ 	fprintf(stderr, "%s: %s\n", progname, msg);
++	checkferror_output(stderr);
+ }
+ 
+ /* print an "out of memory" diagnostic and exit program */
+@@ -71,6 +73,7 @@ dc_show_id(FILE *fp, int id, const char *suffix)
+ 		fprintf(fp, "'%c' (%#o)%s", (unsigned int) id, id, suffix);
+ 	else
+ 		fprintf(fp, "%#o%s", (unsigned int) id, suffix);
++	checkferror_output(fp);
+ }
+ 
+ 
+diff --git a/dc/numeric.c b/dc/numeric.c
+index 556c5bd6478f..887688b0d64f 100644
+--- a/dc/numeric.c
++++ b/dc/numeric.c
+@@ -408,6 +408,7 @@ dc_dump_num(dc_num dcvalue)
+ 
+ 	for (cur=top_of_stack; cur; cur=next) {
+ 		putchar(cur->digit);
++		checkferror_output(stdout);
+ 		next = cur->link;
+ 		free(cur);
+ 	}
+@@ -493,6 +494,8 @@ out_char (int ch)
+ 			out_col = 1;
+ 		}
+ 		putchar(ch);
++                checkferror_output(stdout);
++		checkferror_output(stderr);
+ 	}
+ }
+ 
+@@ -516,6 +519,7 @@ rt_error(const char *mesg, ...)
+ 	vfprintf(stderr, mesg, args);
+ 	va_end(args);
+ 	fprintf(stderr, "\n");
++	checkferror_output(stderr);
+ }
+ 
+ 
+@@ -533,6 +537,7 @@ rt_warn(const char *mesg, ...)
+ 	vfprintf(stderr, mesg, args);
+ 	va_end(args);
+ 	fprintf(stderr, "\n");
++	checkferror_output(stderr);
+ }
+ 
+ 
+diff --git a/dc/stack.c b/dc/stack.c
+index 35f8ee7cc876..36755e42a87d 100644
+--- a/dc/stack.c
++++ b/dc/stack.c
+@@ -28,6 +28,7 @@
+ #include <stdlib.h>
+ #include "dc.h"
+ #include "dc-regdef.h"
++#include "../h/number.h"
+ 
+ /* an oft-used error message: */
+ #define Empty_Stack	dc_warn("stack empty")
+@@ -388,6 +389,7 @@ dc_register_pop(int stackid, dc_data *result)
+ 	r = dc_register[stackid];
+ 	if (!r || r->value.dc_type==DC_UNINITIALIZED){
+ 		fprintf(stderr, "%s: stack register ", progname);
++		checkferror_output(stderr);
+ 		dc_show_id(stderr, stackid, " is empty\n");
+ 		return DC_FAIL;
+ 	}
+diff --git a/dc/string.c b/dc/string.c
+index 41b578c130d2..bc8cac8248df 100644
+--- a/dc/string.c
++++ b/dc/string.c
+@@ -26,6 +26,7 @@
+ #include <stdlib.h>
+ #include <string.h>	/* memcpy */
+ #include "dc.h"
++#include "../h/number.h"
+ 
+ /* here is the completion of the dc_string type: */
+ struct dc_string {
+@@ -71,6 +72,7 @@ void
+ dc_out_str(dc_str value, dc_discard discard_flag)
+ {
+ 	fwrite(value->s_ptr, value->s_len, sizeof *value->s_ptr, stdout);
++	checkferror_output(stdout);
+ 	if (discard_flag == DC_TOSS)
+ 		dc_free_str(&value);
+ }
+@@ -155,6 +157,7 @@ dc_readstring(int (*input)(void), int ldelim, int rdelim, const char *augment)
+ 		}
+ 		*p++ = c;
+ 	}
++
+ 	if (c==EOF && p==line_buf)
+ 		return dc_makestring(NULL, 0, NULL);
+ 	return dc_makestring(line_buf, (size_t)(p-line_buf), augment);
+diff --git a/h/number.h b/h/number.h
+index b2d9f9eae46a..f6fc880de920 100644
+--- a/h/number.h
++++ b/h/number.h
+@@ -23,10 +23,10 @@
+     You may contact the author by:
+        e-mail:  philnelson@acm.org
+       us-mail:  Philip A. Nelson
+-                Computer Science Department, 9062
+-                Western Washington University
+-                Bellingham, WA 98226-9062
+-       
++		Computer Science Department, 9062
++		Western Washington University
++		Bellingham, WA 98226-9062
++
+ *************************************************************************/
+ 
+ #ifndef _NUMBER_H_
+@@ -142,6 +142,8 @@ void bc_out_num (bc_num num, int o_base, void (* out_char)(int),
+ void bc_out_long (long val, int size, int space, void (*out_char)(int));
+ 
+ 
++void checkferror_input (FILE*);
++void checkferror_output (FILE*);
+ 
+ /* function prototypes for callbacks from the library which
+  * need to be provided by the application
+diff --git a/lib/number.c b/lib/number.c
+index f84f4fc87336..9d4553a14b37 100644
+--- a/lib/number.c
++++ b/lib/number.c
+@@ -1714,6 +1714,7 @@ static void
+ out_char (int c)
+ {
+   putchar(c);
++  checkferror_output(stdout);
+ }
+ 
+ 
+@@ -1722,6 +1723,7 @@ pn (bc_num num)
+ {
+   bc_out_num (num, 10, out_char, 0);
+   out_char ('\n');
++  checkferror_output(stdout);
+ }
+ 
+ 
+@@ -1733,6 +1735,28 @@ pv (char *name, unsigned char *num, int len)
+   printf ("%s=", name);
+   for (i=0; i<len; i++) printf ("%c",BCD_CHAR(num[i]));
+   printf ("\n");
++  checkferror_output(stdout);
+ }
+ 
+ #endif
++
++/* check ferror() status and if so die */
++void
++checkferror_input (fp)
++	FILE *fp;
++{
++	if (ferror(fp)) {
++		perror("dc: could not read input file");
++		exit(EXIT_FAILURE);
++	}
++}
++
++void
++checkferror_output (fp)
++	FILE *fp;
++{
++	if (ferror(fp)) {
++		perror("dc: could not write output file");
++		exit(EXIT_FAILURE);
++	}
++}
+-- 
+2.43.0
+

@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/grpclib/json
+md5  4dbde1ad88752eefa7bf70f1fa186182  grpclib-0.4.9.tar.gz
+sha256  cc589c330fa81004c6400a52a566407574498cb5b055fa927013361e21466c46  grpclib-0.4.9.tar.gz
+# Locally computed sha256 checksums
+sha256  8d61e1a3368175363c2983902aad03df636144b01144c0f82c2e9b0d41fa9166  LICENSE.txt

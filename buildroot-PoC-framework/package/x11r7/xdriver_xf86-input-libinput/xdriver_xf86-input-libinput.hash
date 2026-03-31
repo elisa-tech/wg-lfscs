@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-October/003543.html
+sha256  2524c35f196554ea11aef3bba1cf324759454e1d49f98ac026ace2f6003580e6  xf86-input-libinput-1.5.0.tar.xz
+sha512  03090beb7c162fdf55e9bb9da41ffb8601b20047e4a53895bad27de47b3197fc920e710f26fa23e7322b367ab65fa56ba5f9a195ec69801529af3958632c2d6e  xf86-input-libinput-1.5.0.tar.xz
+# Locally computed
+sha256  4114220b281561e80f3422f0e7ae8d3e1fc85131ffc2e3b6265119e66f1adb27  COPYING

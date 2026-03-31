@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/jaraco.collections/json
+md5  57529f8464fb77efaf0398c4395dfca9  jaraco_collections-5.2.1.tar.gz
+sha256  dab81970bad6f0ab53b20745f1b01da37926e4c0fcd425046aa45e0d8efa18ed  jaraco_collections-5.2.1.tar.gz
+# Locally computed sha256 checksums
+sha256  5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d  LICENSE

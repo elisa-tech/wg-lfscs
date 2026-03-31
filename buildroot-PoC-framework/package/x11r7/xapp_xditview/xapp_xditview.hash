@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-February/003449.html
+sha256  039e2d447fa409d4bb25c4e87cf09b4d4b3eff2d3af5aee8e7e52165a3259fd7  xditview-1.0.7.tar.xz
+sha512  da7e80cd9fbb5da0ec4949c6fed0bad135a2490767f030e60f1c51a9f5a62379572bf8b4dd6dec2fe824152d090470e62fce12c9144aaa1be1b48ddbc3b2910b  xditview-1.0.7.tar.xz
+# Locally computed
+sha256  023d879308a49249181f78bbb567e93c45138ad847fe969d191e4802e7a1a005  COPYING

@@ -1,0 +1,6 @@
+# Locally calculated after checking pgp signature
+# using DSA key F153A7C833235259
+# https://www.greenwoodsoftware.com/less/less-692.sig
+sha256  61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14  less-692.tar.gz
+# Locally calculated
+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING

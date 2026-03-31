@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-March/003486.html
+sha256  f18db80bd72a0c27cf38b2a7b75485ee48cd22aab10f2ff58de54d83e268b406  xman-1.2.0.tar.xz
+sha512  072dba172fd30606c1e185c6e50b3b9a9ec5e430eb2ac7f0c476e1c2de998e8c0b5fbf53de20a7339d39a8990255e77fe72d3928b43d055e8463f8069389d192  xman-1.2.0.tar.xz
+# Locally computed
+sha256  4c3d6d6fc5661c64285931a0871728f3745d962d877477235dc66e4043db3d36  COPYING

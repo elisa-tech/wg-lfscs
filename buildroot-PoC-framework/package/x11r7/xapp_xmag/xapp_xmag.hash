@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-October/003536.html
+sha256  326d3c583d795bb53ac609d144e7f7fb1499baba7eaec14b8e6cd232ea069532  xmag-1.0.8.tar.xz
+sha512  d4dbf6bf60a5a3ac88309cdc8f07284a20bd3b044795cd54e002ee5956fa317a09e5f21a9469a6fd9a786f109d8592d8b8e5128ac86850391a6445ccc1f7a11c  xmag-1.0.8.tar.xz
+# Locally computed
+sha256  ef8744e617719339c4934579f8558ee4a5aec4396bebd6af02562b63a7c16d27  COPYING

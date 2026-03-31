@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-March/003474.html
+sha256  7a4b86658a7701253ed0fe8a66471e54e4cacbba66d7278f1759d3b3a33a02c9  xfontsel-1.1.1.tar.xz
+sha512  fdb1f20dc86e2e74da77ef5e62d9465ea24d1af965f1ff3a6334ffefb239130fcf28f7cde9b4e7d7e6c9cf12fcb637784e7af209cffcee3dbe304025d33abcdd  xfontsel-1.1.1.tar.xz
+# Locally computed
+sha256  2c49229e7e4770a8265ef7e7705d92173e983015d3c7aeccee8155a97109c0b7  COPYING

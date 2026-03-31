@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-March/003477.html
+sha256  8b9402f8331309f0a9d8143d4d6129c4a7479ff9449616849b9f1e2a5835cec3  xpr-1.2.0.tar.xz
+sha512  49538a757aa60e754ecd39273510a6e49ebb77b730be62e3fa60f00261c9c1e208d39e1ca3c61889a5ad7fc7c2255fa1f669fd19ecf98e18cb8aa9189cadc15d  xpr-1.2.0.tar.xz
+# Locally computed
+sha256  46f4634338006ce194cd0098a159c701f4587ab8e21c40ce510d8504e85fe128  COPYING

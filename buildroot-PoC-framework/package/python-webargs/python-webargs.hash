@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/webargs/json
+md5  2c62d994f03da6ff81454c186bdbc808  webargs-8.7.1.tar.gz
+sha256  799bf9039c76c23fd8dc1951107a75a9e561203c15d6ae8f89c1e46e234636c1  webargs-8.7.1.tar.gz
+# Locally computed sha256 checksums
+sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE

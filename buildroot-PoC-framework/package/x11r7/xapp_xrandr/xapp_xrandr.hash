@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-November/003551.html
+sha256  f8dd7566adb74147fab9964680b6bbadee87cf406a7fcff51718a5e6949b841c  xrandr-1.5.3.tar.xz
+sha512  2096afb9040ca18005aaf744401df40bdb8e8c8c06ffc97b927e63131800a4dc40cec063bdb5f38cd74b3d24b25fbed258c16cb6c73161efea44b3065b15c100  xrandr-1.5.3.tar.xz
+# Locally computed
+sha256  0dd9a3d62c48dd7b87790029e39fb5e11756d33fded3bc1644e11585c87b2038  COPYING

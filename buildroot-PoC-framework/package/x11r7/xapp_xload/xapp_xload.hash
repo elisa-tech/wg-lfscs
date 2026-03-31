@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-March/003485.html
+sha256  2c0fe6d624e1a25c1707e2d56407b979d6a78d64271df9ea0a89d99b81b59a80  xload-1.2.0.tar.xz
+sha512  b6143f796f7d24bb204e29f341f59c27a0eba00ae58e42bde0d1471e3e9357a0ce5e9e23de119d2540c9f5c71d28eb1e85dd766b6b28a7f066805b5f386aa716  xload-1.2.0.tar.xz
+# Locally computed
+sha256  c5fa9a1ea9032b1422d423b73fac9710a3e54c2d11d9c810ea5fc5585a53977c  COPYING

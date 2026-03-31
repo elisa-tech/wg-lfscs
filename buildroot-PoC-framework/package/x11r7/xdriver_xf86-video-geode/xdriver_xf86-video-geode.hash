@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2025-August/003623.html
+sha256  bdb0fa8154f06be080c88b59e8f7af6b41597161135152aaac84f8ea41853a1f  xf86-video-geode-2.18.2.tar.xz
+sha512  9228db606704494ab4490a676a6d25355d68438fe909b22cba9766040fc92b6484c95ac08a5e7bd09540bff7b37992b37febb4e3de44ec49c026b378836f5478  xf86-video-geode-2.18.2.tar.xz
+# Locally calculated
+sha256  3994ef7cee54f0935a4b57b1c34efd904da567931dd9e1a2d9390d22c8332ea2  COPYING

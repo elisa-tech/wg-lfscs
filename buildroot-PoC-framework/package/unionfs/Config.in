@@ -1,0 +1,14 @@
+config BR2_PACKAGE_UNIONFS
+	bool "unionfs (FUSE)"
+	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, libfuse3
+	depends on BR2_USE_MMU # libfuse, libfuse3
+	depends on !BR2_STATIC_LIBS # libfuse, libfuse3
+	select BR2_PACKAGE_LIBFUSE3 if !BR2_PACKAGE_LIBFUSE
+	help
+	  A userspace unionfs implementation.
+
+	  https://github.com/rpodgorny/unionfs-fuse
+
+comment "unionfs needs a toolchain w/ threads, dynamic library"
+	depends on BR2_USE_MMU
+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS

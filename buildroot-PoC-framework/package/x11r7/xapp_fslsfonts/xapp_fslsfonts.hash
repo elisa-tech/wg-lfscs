@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-December/003563.html
+sha256  67cddb1aa7fccab5d107beef32fa2c143e8a132a2b974a557557b24c6f306b63  fslsfonts-1.0.7.tar.xz
+sha512  e907e3fc1fdbfe72b7c1a502ab479ee2ff4d8577dc0c86152dee5ee48471e514d7c5749707ceb936027cbd93c68a79a0be30334aeb1f812549907c2726e38dd0  fslsfonts-1.0.7.tar.xz
+# Locally computed
+sha256  fbdfcafb5755565ad688bf3f7f808109d358040ec83ed3de496155105451fdf4  COPYING

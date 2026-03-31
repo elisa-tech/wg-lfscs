@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/beniget/json
+md5  5bebc60d33a1b7daa4b3b27d3d1e50ed  beniget-0.5.0.tar.gz
+sha256  e7af11fa8ec7de3d3eb3d98b1e722d15d44017d8b35d8aa11d54f6719b312f22  beniget-0.5.0.tar.gz
+# Locally computed sha256 checksums
+sha256  e0b021e890014fff3f0eca73233f1317ca940ba56f085a644665771361ce4b9f  LICENSE

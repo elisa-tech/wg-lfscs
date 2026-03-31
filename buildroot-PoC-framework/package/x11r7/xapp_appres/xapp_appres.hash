@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-June/003517.html
+sha256  1114b189239fd87a8d1db433edcb4486346d29912132b91eaeee5667f13b819f  appres-1.0.7.tar.xz
+sha512  5948f869124dd7160ffe109b0fc7ccdca45c3b3f551a382a0bcf2c2af9e3832b0d4451e2868ca93a38de8e8e2caf1946ac72936b3256e99a32437d0ddd937a60  appres-1.0.7.tar.xz
+# Locally computed
+sha256  5969302729a9621fd526a7f9942a51a29b858e0b682ffd28eeda5fc4dfaddf55  COPYING

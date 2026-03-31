@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/pygments/json
+md5  79260d1c566a507953a81d24b1c51c72  pygments-2.19.2.tar.gz
+sha256  636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887  pygments-2.19.2.tar.gz
+# Locally computed sha256 checksums
+sha256  a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17  LICENSE

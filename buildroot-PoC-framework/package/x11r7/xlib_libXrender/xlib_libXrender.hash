@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-December/003567.html
+sha256  b832128da48b39c8d608224481743403ad1691bf4e554e4be9c174df171d1b97  libXrender-0.9.12.tar.xz
+sha512  3d24a6877b500608e3e2a393532a99d4fd54fc343375d8fb51dfbb1b50cedf002c7722f771cf7776f93cb6e0421ca5966ce45435cb402d5f12a398f9ea743474  libXrender-0.9.12.tar.xz
+# Locally calculated
+sha256  bbe1db89c48816c48248796adac91defd8fbde1141b145f01511781ab87f29a1  COPYING

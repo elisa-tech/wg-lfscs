@@ -1,0 +1,6 @@
+# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
+md5  f05db07a592a17ae8009df905591a0ea  modbus_tk-1.1.5.tar.gz
+sha256  77a72a3ad9d5d32a1d2110bc04216680ca57d7522912e0f271e9bf5f1b701b36  modbus_tk-1.1.5.tar.gz
+# Locally computed sha256 checksums
+sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt

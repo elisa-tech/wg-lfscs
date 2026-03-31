@@ -1,0 +1,8 @@
+config BR2_PACKAGE_PYTHON_ANYIO
+	bool "python-anyio"
+	select BR2_PACKAGE_PYTHON_IDNA # runtime
+	help
+	  High level compatibility layer for multiple asynchronous
+	  event loop implementations.
+
+	  https://github.com/agronholm/anyio

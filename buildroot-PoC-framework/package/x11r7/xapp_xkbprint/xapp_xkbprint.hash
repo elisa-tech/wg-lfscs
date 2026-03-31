@@ -1,0 +1,5 @@
+# From https://lists.x.org/archives/xorg-announce/2024-October/003535.html
+sha256  1c4f49c030329e0defd8c7bc3739e60f2aa1d2aabe0e2d7e63740ab629aa59cc  xkbprint-1.0.7.tar.xz
+sha512  52f803ba85b053408dfff400f47ae9461954430665a12257a99b9775e26dd7192a97b979de949b9c4532936c9bfcc181a773de41514a122973f05d676dee6476  xkbprint-1.0.7.tar.xz
+# Locally computed
+sha256  79b32f28f7f5063054a564e1fdeee56f82a525b6516303704a1f70e55fe7197e  COPYING
