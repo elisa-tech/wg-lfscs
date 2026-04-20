@@ -1,0 +1,159 @@
+commit 911af33ed2afcb8305e5ae4eab0d28849323574d
+Author: Alessandro Carminati <alessandro.carminati@gmail.com>
+Date:   Mon Apr 20 21:56:39 2026 +0200
+
+    v2
+
+diff --git a/drivers/mem_frag_ent/mem_frag_ent.c b/drivers/mem_frag_ent/mem_frag_ent.c
+index d807ed8bf..b2bb76f7e 100644
+--- a/drivers/mem_frag_ent/mem_frag_ent.c
++++ b/drivers/mem_frag_ent/mem_frag_ent.c
+@@ -4,17 +4,15 @@
+ #include <linux/list.h>
+ #include <linux/random.h>
+ #include <linux/mm.h>
++#include <linux/vmalloc.h>
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("blabla");
+-MODULE_DESCRIPTION("A module to induce SLUB fragmentation and memory entropy");
++MODULE_DESCRIPTION("Interleaved SLUB fragmentation module");
+ 
+-#define PHASE1_INITIAL 10
+-#define PHASE1_OPS 200
+-#define STACK_MAX (PHASE1_INITIAL + PHASE1_OPS)
+-
+-struct list_head noise_list;
+-struct list_head *global_noise_head = &noise_list;
++#ifndef MODULE
++#error "This driver must be compiled as a module!"
++#endif
+ 
+ struct noise_item {
+ 	struct list_head list;
+@@ -22,6 +20,11 @@ struct noise_item {
+ 	size_t size;
+ };
+ 
++static LIST_HEAD(noise_list);
++static void **temp_stack;
++static size_t stack_size = 1000000;
++static int top = -1;
++
+ static size_t get_rand_size(void) {
+ 	unsigned int r;
+ 	get_random_bytes(&r, sizeof(r));
+@@ -29,47 +32,33 @@ static size_t get_rand_size(void) {
+ }
+ 
+ static int __init frag_entropy_init(void) {
+-	void *stack[STACK_MAX];
+-	int top = -1;
+-	int i;
+-	unsigned int rand_val;
+ 	size_t target_mem, current_mem = 0;
++	unsigned int rand_count;
++	int i;
+ 
+-	INIT_LIST_HEAD(&noise_list);
+-
+-	pr_info("FragEntropy: Starting Phase 1 (Fragmentation Noise)\n");
+-
+-	for (i = 0; i < PHASE1_INITIAL; i++) {
+-		size_t sz = get_rand_size();
+-		stack[++top] = kmalloc(sz, GFP_KERNEL);
+-	}
+-
+-	for (i = 0; i < PHASE1_OPS; i++) {
+-		get_random_bytes(&rand_val, sizeof(rand_val));
+-
+-		if ((rand_val % 2 == 0) && (top < STACK_MAX - 1)) {
+-			stack[++top] = kmalloc(get_rand_size(), GFP_KERNEL);
+-		} else if (top >= 0) {
+-			kfree(stack[top--]);
+-		}
+-	}
+-
+-	while (top >= 0) {
+-		kfree(stack[top--]);
+-	}
++	pr_info("FragEntropy: Initializing interleaved fragmentation...\n");
+ 
+-	pr_info("FragEntropy: Starting Phase 2 (Persistent Bloat)\n");
++	temp_stack = vmalloc(sizeof(void *) * stack_size);
++	if (!temp_stack)
++		return -ENOMEM;
+ 
+ 	target_mem = (totalram_pages() << PAGE_SHIFT) / 10;
+-	pr_info("FragEntropy: Target memory bloat: %zu bytes\n", target_mem);
++	pr_info("FragEntropy: Targeting %zu bytes for persistent entanglement\n", target_mem);
+ 
+ 	while (current_mem < target_mem) {
+-		struct noise_item *item;
+-		size_t sz = get_rand_size();
++		get_random_bytes(&rand_count, sizeof(rand_count));
++		rand_count = (rand_count % 11) + 5;
++
++		for (i = 0; i < rand_count; i++) {
++			if (top < (int)stack_size - 1) {
++				temp_stack[++top] = kmalloc(get_rand_size(), GFP_KERNEL);
++			}
++		}
+ 
+-		item = kmalloc(sizeof(struct noise_item), GFP_KERNEL);
++		struct noise_item *item = kmalloc(sizeof(struct noise_item), GFP_KERNEL);
+ 		if (!item) break;
+ 
++		size_t sz = get_rand_size();
+ 		item->data = kmalloc(sz, GFP_KERNEL);
+ 		if (!item->data) {
+ 			kfree(item);
+@@ -77,30 +66,41 @@ static int __init frag_entropy_init(void) {
+ 		}
+ 
+ 		item->size = sz;
+-		list_add(&item->list, global_noise_head);
++		list_add(&item->list, &noise_list);
+ 		current_mem += (sz + sizeof(struct noise_item));
+ 
+-		if ((current_mem % (100 * 1024 * 1024)) < sz) {
+-			pr_info("FragEntropy: Allocated %zu MB...\n", current_mem / 1024 / 1024);
++		if ((current_mem % (200 * 1024 * 1024)) < (sz + 100)) {
++			pr_info("FragEntropy: %zu MB pinned in slabs...\n", current_mem / 1024 / 1024);
++		}
++	}
++
++	pr_info("FragEntropy: Persistent phase reached. Popping stack to create holes.\n");
++	while (top >= 0) {
++		if (temp_stack[top]) {
++			kfree(temp_stack[top]);
+ 		}
++		top--;
+ 	}
+ 
+-	pr_info("FragEntropy: Init complete. Memory consumed.\n");
++	vfree(temp_stack);
++	pr_info("FragEntropy: Initialization complete. SLUB should now be highly fragmented.\n");
+ 	return 0;
+ }
+ 
+ static void __exit frag_entropy_exit(void) {
+ 	struct noise_item *item, *tmp;
++	size_t freed_count = 0;
+ 
+-	pr_info("FragEntropy: Cleaning up and deallocating memory...\n");
++	pr_info("FragEntropy: Starting cleanup of pinned objects...\n");
+ 
+-	list_for_each_entry_safe(item, tmp, global_noise_head, list) {
++	list_for_each_entry_safe(item, tmp, &noise_list, list) {
+ 		kfree(item->data);
+ 		list_del(&item->list);
+ 		kfree(item);
++		freed_count++;
+ 	}
+ 
+-	pr_info("FragEntropy: Module unloaded.\n");
++	pr_info("FragEntropy: Cleanup complete. Freed %zu persistent items.\n", freed_count);
+ }
+ 
+ module_init(frag_entropy_init);
