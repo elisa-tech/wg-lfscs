@@ -1,0 +1,4 @@
+config BR2_PACKAGE_OVERCOMMIT_DEMO
+	bool "OVERCOMMIT_demo"
+	help
+	  Small memory overcommit demo.

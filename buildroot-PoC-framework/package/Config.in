@@ -10,6 +10,7 @@ menu "Target packages"
 	source "package/skeleton-init-sysv/Config.in"
 menu "Elisa PoC"
 	source "package/vm_latency_demo/Config.in"
+	source "package/overcommit_demo/Config.in"
 endmenu
 
 menu "Audio and video applications"
