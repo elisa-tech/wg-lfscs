@@ -11,6 +11,7 @@ menu "Target packages"
 menu "Elisa PoC"
 	source "package/vm_latency_demo/Config.in"
 	source "package/overcommit_demo/Config.in"
+	source "package/direct_map_view/Config.in"
 endmenu
 
 menu "Audio and video applications"

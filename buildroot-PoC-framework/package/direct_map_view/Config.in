@@ -1,0 +1,4 @@
+config BR2_PACKAGE_DIRECT_MAP_VIEW
+	bool "DIRECT_MAP_VIEW"
+	help
+	  Show in ANSI kernel Direct map
