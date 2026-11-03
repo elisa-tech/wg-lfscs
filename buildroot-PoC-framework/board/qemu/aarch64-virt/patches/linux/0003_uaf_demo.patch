@@ -1,0 +1,269 @@
+commit 0000000000000000000000000000000000000003
+Author: Alessandro Carminati <alessandro.carminati@gmail.com>
+Date:   Mon Oct 27 00:00:00 2026 +0100
+
+    uaf_demo: use-after-free / double-free demonstrator
+
+    Reproduces slide 13 of "Prague 2026 - OSS" using plain kmalloc()/kfree()
+    on the shared kmalloc-512 slab - the real allocator path - so the fault
+    is genuine, not staged in a private cache.
+
+    The faulty Component A/B/C sequence runs on demand, the first time
+    /dev/fake1 or /dev/fake2 is opened, and each allocator operation prints
+    one kernel line:
+
+        [A] alloc        obj=...
+        [A] free         obj=...
+        [B] fake1 alloc  obj=...
+        [A] double free  obj=...
+        [C] fake2 alloc  obj=...
+
+    Because of SLUB's LIFO freelist the double free makes fake1 (B) and
+    fake2 (C) alias the same object: a write through fake1 is then visible
+    when reading fake2. This performs a real double free on the shared slab
+    and is a demonstrator for an isolated VM only. Built into the kernel
+    (CONFIG_UAF_DEMO=y, bool default y).
+
+    fops are minimal: open, release, read, write.
+
+    Signed-off-by: Alessandro Carminati <alessandro.carminati@gmail.com>
+
+--- a/drivers/Kconfig	2026-10-27 09:53:43.803102020 +0100
++++ b/drivers/Kconfig	2026-10-27 09:06:24.507651102 +0100
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ menu "Device Drivers"
+ source "drivers/mem_frag_ent/Kconfig"
++source "drivers/uaf_demo/Kconfig"
+ 
+ # Keep I/O buses first
+ 
+--- a/drivers/Makefile	2026-10-27 09:53:43.804102031 +0100
++++ b/drivers/Makefile	2026-10-27 09:06:24.507833475 +0100
+@@ -7,6 +7,7 @@
+ #
+ 
+ obj-y                           += mem_frag_ent/
++obj-y                           += uaf_demo/
+ 
+ obj-y				+= cache/
+ obj-y				+= irqchip/
+--- /dev/null	2026-10-27 08:09:51.114566257 +0100
++++ b/drivers/uaf_demo/Kconfig	2026-10-27 09:53:21.051854940 +0100
+@@ -0,0 +1,12 @@
++config UAF_DEMO
++	bool "Use-after-free / double-free demonstrator (OSS Prague 2026)"
++	default y
++	help
++	  Built-in demonstrator for the use-after-free scenario from slide 13
++	  of the "Prague 2026 - OSS" talk. The first time /dev/fake1 or
++	  /dev/fake2 is opened it performs a real double free on the shared
++	  kmalloc-512 slab, so that the two devices end up sharing one 512-byte
++	  buffer: writing to one is then visible when reading the other.
++
++	  This performs a genuine double free on the shared allocator and is a
++	  teaching/PoC aid for an isolated VM only. Say N for any real system.
+--- /dev/null	2026-10-27 08:09:51.114566257 +0100
++++ b/drivers/uaf_demo/Makefile	2026-10-27 09:06:24.508079860 +0100
+@@ -0,0 +1 @@
++obj-$(CONFIG_UAF_DEMO) += uaf_demo.o
+--- /dev/null	2026-10-27 08:09:51.114566257 +0100
++++ b/drivers/uaf_demo/uaf_demo.c	2026-10-27 09:53:11.501751229 +0100
+@@ -0,0 +1,197 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * uaf_demo - A use-after-free / double-free demonstrator.
++ *
++ * Reproduces the scenario from slide 13 of the "Prague 2026 - OSS" talk,
++ * using plain kmalloc()/kfree() against the shared kmalloc-512 slab - the
++ * same allocator path real kernel code uses - so the fault is genuine and
++ * not staged inside a private cache:
++ *
++ *   - Component A allocates an object, uses it, and frees it  (correct).
++ *   - Component B allocates and receives the SAME memory      (correct).
++ *   - Component A, holding a stale pointer, frees it AGAIN    (the ONE bug).
++ *   - Component C allocates and receives the SAME memory again.
++ *   - Now B and C unknowingly share one object.
++ *
++ * Component B is exposed as /dev/fake1 and Component C as /dev/fake2. The
++ * faulty A/B/C sequence runs on demand, the first time either device is
++ * opened, and each component operation prints one kernel line. After that
++ * the devices are ordinary 512-byte scratch devices: write() stores bytes,
++ * read() reports them. Because of the double free they share one backing
++ * object, so a write through fake1 is visible through fake2:
++ *
++ *     echo -n HELLO > /dev/fake1
++ *     cat /dev/fake2            # <-- also reads "HELLO"
++ *
++ * fops are deliberately minimal: open, release, read, write.
++ *
++ * This is a demonstrator for an isolated kernel in an emulator. It performs
++ * a real double free on the shared slab; do not run it on anything you care
++ * about.
++ *
++ * NOTE: the effect relies on SLUB's LIFO freelist handing the just-freed
++ * object back on the next allocation. Boot WITHOUT slub_debug enabling the
++ * consistency/free checks ('F'): those checks exist to catch exactly this.
++ */
++
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/init.h>
++#include <linux/fs.h>
++#include <linux/miscdevice.h>
++#include <linux/mutex.h>
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++
++#define FAKE_BUF_SIZE 512
++
++struct fake_dev {
++	struct miscdevice misc;
++	void *buf;
++};
++
++/* The A/B/C sequence runs once, on first open. */
++static DEFINE_MUTEX(arm_lock);
++static bool armed;
++
++static inline struct fake_dev *to_fake_dev(struct file *f)
++{
++	return container_of(f->private_data, struct fake_dev, misc);
++}
++
++static struct fake_dev fake1;
++static struct fake_dev fake2;
++
++/*
++ * Orchestrate Component A's faulty lifecycle and hand the resulting objects
++ * to Component B (fake1) and Component C (fake2). Each step prints one line.
++ */
++static void run_sequence(void)
++{
++	void *a, *b, *c;
++
++	a = kmalloc(FAKE_BUF_SIZE, GFP_KERNEL);
++	if (!a)
++		return;
++	pr_info("uaf_demo: [A] alloc        obj=%px\n", a);
++	kfree(a);
++	pr_info("uaf_demo: [A] free         obj=%px\n", a);
++
++	b = kmalloc(FAKE_BUF_SIZE, GFP_KERNEL);
++	if (!b)
++		return;
++	pr_info("uaf_demo: [B] fake1 alloc  obj=%px\n", b);
++
++	kfree(a);
++	pr_info("uaf_demo: [A] double free  obj=%px\n", a);
++
++	c = kmalloc(FAKE_BUF_SIZE, GFP_KERNEL);
++	if (!c)
++		return;
++	pr_info("uaf_demo: [C] fake2 alloc  obj=%px\n", c);
++
++	fake1.buf = b;
++	fake2.buf = c;
++}
++
++static int fake_open(struct inode *inode, struct file *f)
++{
++	/* First open triggers the double-free sequence that wires up buf. */
++	mutex_lock(&arm_lock);
++	if (!armed) {
++		run_sequence();
++		armed = true;
++	}
++	mutex_unlock(&arm_lock);
++	return 0;
++}
++
++static int fake_release(struct inode *inode, struct file *f)
++{
++	return 0;
++}
++
++static ssize_t fake_read(struct file *f, char __user *ubuf,
++			 size_t count, loff_t *ppos)
++{
++	struct fake_dev *d = to_fake_dev(f);
++
++	if (!d->buf)
++		return -ENODEV;
++	return simple_read_from_buffer(ubuf, count, ppos,
++				       d->buf, FAKE_BUF_SIZE);
++}
++
++static ssize_t fake_write(struct file *f, const char __user *ubuf,
++			  size_t count, loff_t *ppos)
++{
++	struct fake_dev *d = to_fake_dev(f);
++
++	if (!d->buf)
++		return -ENODEV;
++	return simple_write_to_buffer(d->buf, FAKE_BUF_SIZE, ppos,
++				      ubuf, count);
++}
++
++static const struct file_operations fake_fops = {
++	.owner	 = THIS_MODULE,
++	.open	 = fake_open,
++	.release = fake_release,
++	.read	 = fake_read,
++	.write	 = fake_write,
++};
++
++static struct fake_dev fake1 = {
++	.misc = {
++		.minor = MISC_DYNAMIC_MINOR,
++		.name  = "fake1",
++		.fops  = &fake_fops,
++		.mode  = 0666,
++	},
++};
++
++static struct fake_dev fake2 = {
++	.misc = {
++		.minor = MISC_DYNAMIC_MINOR,
++		.name  = "fake2",
++		.fops  = &fake_fops,
++		.mode  = 0666,
++	},
++};
++
++static int __init uaf_demo_init(void)
++{
++	int ret;
++
++	ret = misc_register(&fake1.misc);
++	if (ret) {
++		pr_err("uaf_demo: failed to register fake1: %d\n", ret);
++		return ret;
++	}
++	ret = misc_register(&fake2.misc);
++	if (ret) {
++		pr_err("uaf_demo: failed to register fake2: %d\n", ret);
++		misc_deregister(&fake1.misc);
++		return ret;
++	}
++	return 0;
++}
++
++static void __exit uaf_demo_exit(void)
++{
++	misc_deregister(&fake2.misc);
++	misc_deregister(&fake1.misc);
++	/*
++	 * fake1.buf and fake2.buf alias the same object; free it once only
++	 * (freeing twice here would be a second, real double free).
++	 */
++	if (fake1.buf)
++		kfree(fake1.buf);
++}
++
++module_init(uaf_demo_init);
++module_exit(uaf_demo_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Alessandro Carminati <alessandro.carminati@gmail.com>");
++MODULE_DESCRIPTION("Use-after-free / double-free demonstrator (OSS Prague 2026, slide 13)");
